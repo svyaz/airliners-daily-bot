@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: AirlinersDailyBot
+
+bot:
+  name: AirlinersDailyBot
+  token: 8020813077:AAEJ8JwRj7PdY1jx4tHVpxfA01M6kdHDlsY
+
+client:
+  baseUrl: https://www.airliners.net
+  maxBufferSize: 1024000
