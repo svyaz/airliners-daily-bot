@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -32,7 +30,7 @@ public class PictureData {
     private String location;
 
     // photo date
-    private LocalDate date;
+    private String date;
 
     // content
     private String content;

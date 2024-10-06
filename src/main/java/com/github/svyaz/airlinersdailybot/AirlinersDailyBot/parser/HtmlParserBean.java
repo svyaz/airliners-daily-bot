@@ -15,8 +15,16 @@ public class HtmlParserBean implements HtmlParser {
 
     private static final String TOP_PHOTO_LINK_SELECTOR = "div.hp-t5-row-photo a";
     private static final String TITLE_SELECTOR = "h1.photo-details-page-title span";
-    private static final String PHOTO_LINK_SELECTOR = "div.pdp-image-wrapper img";
-
+    private static final String PHOTO_PAGE_URI_SELECTOR = "meta[property='og:url']";
+    private static final String AIRLINE_SELECTOR = "div.pib-section-content-left a[href*=airline]";
+    private static final String AIRCRAFT_SELECTOR = "div.pib-section-content-left a[href*=aircraft]";
+    private static final String REGISTRATION_SELECTOR = "div.pib-section-content-right a[href*=registration]";
+    private static final String LOCATION_SELECTOR = "div.pib-section-location-date a[href*=location]";
+    private static final String DATE_SELECTOR = "div.pib-section-location-date a[href*=datePhotographed]";
+    private static final String CONTENT_SELECTOR = "div.pib-section-caption div.pib-section-content";
+    private static final String AUTHOR_SELECTOR = "div.pib-section-photographer a.ua-name-content";
+    private static final String AUTHOR_COUNTRY_SELECTOR = "div.pib-section-photographer span.ua-country";
+    private static final String PHOTO_FILE_URI_SELECTOR = "div.pdp-image-wrapper img";
 
     @Override
     public String getLargePicturePageUri(String html) {
@@ -27,40 +35,40 @@ public class HtmlParserBean implements HtmlParser {
                 .orElseThrow(() -> new ParseException("Top photo link not found"));
     }
 
-    @Override   //todo get rest fields
+    @Override
     public PictureEntity getPictureData(String html) {
         var document = Jsoup.parse(html);
 
         var pictureData = PictureData.builder()
-                .title(getTitle(document))
-                //.photoPageUri()
-                //.airline()
-                //.aircraft()
-                //.registration()
-                //.location()
-                //.date()
-                //.content()
-                //.author()
-                //.authorCountry()
+                .title(selectFromElementValue(document, TITLE_SELECTOR))
+                .photoPageUri(selectFromAttribute(document, PHOTO_PAGE_URI_SELECTOR, "content"))
+                .airline(selectFromElementValue(document, AIRLINE_SELECTOR))
+                .aircraft(selectFromElementValue(document, AIRCRAFT_SELECTOR))
+                .registration(selectFromElementValue(document, REGISTRATION_SELECTOR))
+                .location(selectFromElementValue(document, LOCATION_SELECTOR))
+                .date(selectFromElementValue(document, DATE_SELECTOR))
+                .content(selectFromElementValue(document, CONTENT_SELECTOR))
+                .author(selectFromElementValue(document, AUTHOR_SELECTOR))
+                .authorCountry(selectFromElementValue(document, AUTHOR_COUNTRY_SELECTOR))
                 .build();
 
         return PictureEntity.builder()
-                .photoFileUri(getPhotoFileUri(document))
+                .photoFileUri(selectFromAttribute(document, PHOTO_FILE_URI_SELECTOR, "src"))
                 .pictureData(pictureData)
                 .build();
     }
 
-    private String getTitle(Document document) {
+    private String selectFromElementValue(Document document, String query) {
         return Optional.of(document)
-                .map(d -> d.select(TITLE_SELECTOR))
+                .map(d -> d.select(query))
                 .map(Elements::text)
                 .orElse(null);
     }
 
-    private String getPhotoFileUri(Document document) {
-        return Optional.of(document)
-                .map(d -> d.select(PHOTO_LINK_SELECTOR))
-                .map(e -> e.attr("src"))
+    private String selectFromAttribute(Document document, String query, String attrName) {
+        return Optional.ofNullable(document)
+                .map(d -> d.select(query))
+                .map(e -> e.attr(attrName))
                 .orElse(null);
     }
 }
