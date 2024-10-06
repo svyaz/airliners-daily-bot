@@ -1,7 +1,8 @@
 package com.github.svyaz.airlinersdailybot.AirlinersDailyBot.parser;
 
 import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.errors.ParseException;
-import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model.db.PictureEntity;
+import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model.PictureData;
+import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model.PictureEntity;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -13,7 +14,7 @@ import java.util.Optional;
 public class HtmlParserBean implements HtmlParser {
 
     private static final String TOP_PHOTO_LINK_SELECTOR = "div.hp-t5-row-photo a";
-    private static final String ID_SELECTOR = "h1.photo-details-page-title span";
+    private static final String TITLE_SELECTOR = "h1.photo-details-page-title span";
     private static final String PHOTO_LINK_SELECTOR = "div.pdp-image-wrapper img";
 
 
@@ -27,23 +28,36 @@ public class HtmlParserBean implements HtmlParser {
     }
 
     @Override   //todo get rest fields
-    public PictureEntity getTarget(String html) {
+    public PictureEntity getPictureData(String html) {
         var document = Jsoup.parse(html);
 
-        return PictureEntity.builder()
+        var pictureData = PictureData.builder()
                 .title(getTitle(document))
-                .photoLink(getPhotoLink(document))
+                //.photoPageUri()
+                //.airline()
+                //.aircraft()
+                //.registration()
+                //.location()
+                //.date()
+                //.content()
+                //.author()
+                //.authorCountry()
+                .build();
+
+        return PictureEntity.builder()
+                .photoFileUri(getPhotoFileUri(document))
+                .pictureData(pictureData)
                 .build();
     }
 
     private String getTitle(Document document) {
         return Optional.of(document)
-                .map(d -> d.select(ID_SELECTOR))
+                .map(d -> d.select(TITLE_SELECTOR))
                 .map(Elements::text)
                 .orElse(null);
     }
 
-    private String getPhotoLink(Document document) {
+    private String getPhotoFileUri(Document document) {
         return Optional.of(document)
                 .map(d -> d.select(PHOTO_LINK_SELECTOR))
                 .map(e -> e.attr("src"))

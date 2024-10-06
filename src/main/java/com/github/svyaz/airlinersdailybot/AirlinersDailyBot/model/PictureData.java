@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model.db;
+package com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PictureEntity {
+public class PictureData {
 
     // picture title
     private String title;
 
-    // link
-    private String photoLink;
+    // photo page uri
+    private String photoPageUri;
 
     // airline
     private String airline;
@@ -27,9 +27,6 @@ public class PictureEntity {
 
     // actual registration
     private String registration;
-
-    // manufacturer serial number
-    private String msn;
 
     // photo location
     private String location;
@@ -45,4 +42,5 @@ public class PictureEntity {
 
     // author country
     private String authorCountry;
+
 }

@@ -1,41 +1,96 @@
 package com.github.svyaz.airlinersdailybot.AirlinersDailyBot.bot;
 
 import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.conf.BotConfig;
+import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.service.PictureHolderService;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.Comparator;
+import java.util.List;
+
+/* TODO list:
+ * 1. При старте если не обновились данные - NPE. Сделать сообщение
+ * + 2. Сохранение file_id после первой отправки картинки в holderService
+ * 3. Логирование - на АОП!
+ * */
+@Slf4j
 @Component
 public class AirlinersBot extends TelegramLongPollingBot {
 
     private final String botName;
 
+    private final PictureHolderService holderService;
+
     @Autowired
-    public AirlinersBot(BotConfig botConfig) {
+    public AirlinersBot(BotConfig botConfig, PictureHolderService holderService) {
         super(botConfig.getBotToken());
         this.botName = botConfig.getBotName();
-    }
-
-    @Override
-    public void onUpdateReceived(Update update) {
-        System.out.println(update.getMessage().getText());
-
-        try {
-            var msg = new SendMessage();
-            msg.setChatId(update.getMessage().getChatId());
-            msg.setText("https://www.airliners.net/photo/AeroMexico/737-MAX-9/7682469/L");
-            execute(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.holderService = holderService;
     }
 
     @Override
     public String getBotUsername() {
         return botName;
+    }
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        if (update.hasCallbackQuery()) {
+            sendPlaneMessage(update);
+        }
+
+        if (update.hasMessage()) {
+            sendUnknownCommandMessage(update);
+        }
+    }
+
+    @SneakyThrows
+    private void sendPlaneMessage(Update update) {
+        log.info("sendPlaneMessage: entity {}", holderService.getEntity());
+
+        var msg = SendPhoto.builder()
+                .chatId(update.getCallbackQuery().getMessage().getChatId())
+                .photo(holderService.getInputFile())
+                .caption("Here it is!")
+                .replyMarkup(getKeyboardMarkup())
+                .build();
+
+        var message = execute(msg);
+
+        message.getPhoto().stream()
+                .max(Comparator.comparing(PhotoSize::getWidth))
+                .map(PhotoSize::getFileId)
+                .ifPresent(holderService::setFileId);
+    }
+
+    @SneakyThrows
+    private void sendUnknownCommandMessage(Update update) {
+        var msg = SendMessage.builder()
+                .chatId(update.getMessage().getChatId())
+                .text("I don't know this command!")
+                .replyMarkup(getKeyboardMarkup())
+                .build();
+
+        execute(msg);
+    }
+
+    private InlineKeyboardMarkup getKeyboardMarkup() {
+        return InlineKeyboardMarkup.builder()
+                .keyboard(List.of(
+                        List.of(InlineKeyboardButton.builder()
+                                .text("Show picture!")
+                                .callbackData("SHOW")
+                                .build())))
+                .build();
     }
 
 }

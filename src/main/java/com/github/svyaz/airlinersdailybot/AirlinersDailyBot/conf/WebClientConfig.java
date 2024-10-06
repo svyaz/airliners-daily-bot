@@ -1,11 +1,13 @@
 package com.github.svyaz.airlinersdailybot.AirlinersDailyBot.conf;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Getter
 @Configuration
 public class WebClientConfig {
 

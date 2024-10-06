@@ -1,50 +1,66 @@
 package com.github.svyaz.airlinersdailybot.AirlinersDailyBot.service;
 
-import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.mapper.PictureToEntityMapper;
-import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model.db.PictureEntity;
+import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.mapper.PictureIdGetter;
+import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.model.PictureEntity;
 import com.github.svyaz.airlinersdailybot.AirlinersDailyBot.parser.HtmlParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PictureUpdateServiceBean implements PictureUpdateService {
 
+    private final PictureHolderService holderService;
     private final WebClient webClient;
     private final HtmlParser htmlParser;
+    private final PictureIdGetter pictureIdGetter;
 
-    private final PictureToEntityMapper entityMapper;
+    //private final PictureToEntityMapper entityMapper;
 
     @Override
-    @Scheduled(initialDelay = 5_000, fixedDelay = 10_000)
-    public void getPicture() {
-        System.out.println("I went for picture update");
+    @Scheduled(initialDelay = 1_000, fixedDelay = 60_000)
+    public void updatePictureIfNeed() {
+        log.debug("updatePictureIfNeed <-");
 
-        var target = getTopPhotoLinkUri()
-                .flatMap(this::getTargetData)
-                .block();
+        var topPhotoPageUri = getTopPhotoPageUri();
+        var pictureId = pictureIdGetter.getId(topPhotoPageUri);
 
-                //.block();
+        if (holderService.hasChanged(pictureId)) {
+            log.debug("updatePictureIfNeed: picture has been changed, new id [{}]", pictureId);
+
+            var pictureEntity = getPictureEntity(topPhotoPageUri);
+            pictureEntity.setId(pictureId);
+            //pictureEntity.setPhotoPageUri(topPhotoPageUri); //todo move to htmlParser
+
+            //var pictureData = getPictureData(pictureEntity.getPhotoFileUri());
+
+            holderService.setEntity(pictureEntity);
+        }
+
     }
 
-    private Mono<String> getTopPhotoLinkUri() {
+    private String getTopPhotoPageUri() {
         return webClient.get()
                 .uri("/")
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(htmlParser::getLargePicturePageUri)
-                .log();
+                .log()
+                .block();
     }
 
-    private Mono<PictureEntity> getTargetData(String uri) {
+    private PictureEntity getPictureEntity(String uri) {
         return webClient.get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class)
-                .map(htmlParser::getTarget)
-                .log();
+                .map(htmlParser::getPictureData)
+                .log()
+                .block();
     }
+
 }
