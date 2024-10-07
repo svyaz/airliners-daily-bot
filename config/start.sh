@@ -1,0 +1,1 @@
+~/Library/Java/JavaVirtualMachines/liberica-17.0.12/bin/java -jar AirlinersDailyBot-0.0.1.jar --spring.profiles.active=prod

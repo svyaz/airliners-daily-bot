@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: AirlinersDaily-Test-Bot
+
+bot:
+  name: AirlinersDaily-Test-Bot
+  token: ${BOT_TOKEN}
+
+client:
+  baseUrl: https://www.airliners.net
+  maxBufferSize: 1024000

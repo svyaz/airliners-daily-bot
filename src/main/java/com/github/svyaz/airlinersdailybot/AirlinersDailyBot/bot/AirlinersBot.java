@@ -21,12 +21,21 @@ import java.util.List;
  * 1. При старте если не обновились данные - NPE. Сделать сообщение
  * + 2. Сохранение file_id после первой отправки картинки в holderService
  * 3. Логирование - на АОП!
- * 4. Шаблоны сообщений для caption - русский и английский.
+ * 4. Шаблоны сообщений для caption - русский и английский. Java 21
  * 5. Команда /start
  * 6. Команда /info
  * 7. Обработка не командного текста
  * 8. ЛОгирование запросов (noSQL)
  * 9. Дату фотки заформатить на LocalDate
+ * 10. Логирование апдейтера
+ * 11. Тесты ;))
+ * 12. Таймауты обновления - в конфиг
+ * 13. Хостинг и в работу
+ * 14. Тестовый бот!
+ * 15. Выложить на github
+ * 16. token в переменные окружения!
+ * 17. config - снаружи
+ * 18. Профили prod, test
  * */
 @Slf4j
 @Component
@@ -50,6 +59,8 @@ public class AirlinersBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        log.info("onUpdateReceived <-");
+
         if (update.hasCallbackQuery()) {
             sendPlaneMessage(update);
         }
@@ -61,12 +72,16 @@ public class AirlinersBot extends TelegramLongPollingBot {
 
     @SneakyThrows
     private void sendPlaneMessage(Update update) {
-        log.info("sendPlaneMessage: entity {}", holderService.getEntity());
+        log.debug("sendPlaneMessage <-");
+
+        var data = holderService.getEntity().getPictureData();
 
         var msg = SendPhoto.builder()
                 .chatId(update.getCallbackQuery().getMessage().getChatId())
                 .photo(holderService.getInputFile())
-                .caption("Here it is!")
+                .caption(String.format("%s%nAirline: %s%nAircraft: %s",
+                        data.getTitle(), data.getAirline(), data.getAircraft()
+                ))
                 .replyMarkup(getKeyboardMarkup())
                 .build();
 

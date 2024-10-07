@@ -22,7 +22,7 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
     //private final PictureToEntityMapper entityMapper;
 
     @Override
-    @Scheduled(initialDelay = 1_000, fixedDelay = 60_000)
+    @Scheduled(initialDelay = 1_000, fixedDelay = 600_000)
     public void updatePictureIfNeed() {
         log.debug("updatePictureIfNeed <-");
 
@@ -34,10 +34,6 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
 
             var pictureEntity = getPictureEntity(topPhotoPageUri);
             pictureEntity.setId(pictureId);
-            //pictureEntity.setPhotoPageUri(topPhotoPageUri); //todo move to htmlParser
-
-            //var pictureData = getPictureData(pictureEntity.getPhotoFileUri());
-
             holderService.setEntity(pictureEntity);
         }
 
