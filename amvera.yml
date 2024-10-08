@@ -5,11 +5,11 @@ meta:
     version: 21
 
 build:
-  args: -Dserver.port=80 -Pproduction
+  args: spring-boot:repackage
   artifacts:
     build/libs/*.jar: /
 
 run:
-  jarName: airliners-daily-bot-boot.jar
+  jarName: AirlinersDailyBot-0.0.1.jar
   persistenceMount: /data
   containerPort: 80
