@@ -6,6 +6,10 @@ meta:
 
 build:
   args: -Dserver.port=80 -Pproduction
+  artifacts:
+    build/libs/*.jar: /
 
 run:
   jarName: airliners-daily-bot-boot.jar
+  persistenceMount: /data
+  containerPort: 80
