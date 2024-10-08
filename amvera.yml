@@ -11,5 +11,6 @@ build:
 
 run:
   jarName: AirlinersDailyBot-0.0.1.jar
+  args: --spring.active.profiles=prod
   persistenceMount: /data
   containerPort: 80
