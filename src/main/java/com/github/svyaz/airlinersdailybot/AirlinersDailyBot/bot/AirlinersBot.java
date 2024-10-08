@@ -9,19 +9,25 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /* TODO list:
  * 1. При старте если не обновились данные - NPE. Сделать сообщение
  * + 2. Сохранение file_id после первой отправки картинки в holderService
  * 3. Логирование - на АОП!
  * 4. Шаблоны сообщений для caption - русский и английский. Java 21
+ *      в callback.message.user нету lang_code. Можно запоминать из присланных при подписке.
+ *      (plugin String manipulation)
  * 5. Команда /start
  * 6. Команда /info
  * 7. Обработка не командного текста
@@ -93,6 +99,8 @@ public class AirlinersBot extends TelegramLongPollingBot {
 
     @SneakyThrows
     private void sendUnknownCommandMessage(Update update) {
+        log.debug("sendUnknownCommandMessage <-");
+
         var msg = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text("I don't know this command!")
