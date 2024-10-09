@@ -19,10 +19,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /* TODO list:
- * 1. При старте если не обновились данные - NPE. Сделать сообщение
+ * + 1. При старте если не обновились данные - NPE. Сделать сообщение
  * + 2. Сохранение file_id после первой отправки картинки в holderService
  * 3. Логирование - на АОП!
  * 4. Шаблоны сообщений для caption - русский и английский. Java 21
@@ -36,7 +37,7 @@ import java.util.Optional;
  * 10. Логирование апдейтера
  * 11. Тесты ;))
  * 12. Таймауты обновления - в конфиг
- * 13. Хостинг
+ * +-13. Хостинг
  * 14. Тестовый бот!
  * 15. Фича с БД - запоминать какую последнюю картинку показывали юзеру и повторно не отправлять.
  *
@@ -77,6 +78,11 @@ public class AirlinersBot extends TelegramLongPollingBot {
     @SneakyThrows
     private void sendPlaneMessage(Update update) {
         log.debug("sendPlaneMessage <-");
+
+        if(Objects.isNull(holderService.getEntity())) {
+            log.debug("sendPlaneMessage -> no picture data yet.");
+            return;
+        }
 
         var data = holderService.getEntity().getPictureData();
 
