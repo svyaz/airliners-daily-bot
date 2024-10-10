@@ -1,7 +1,7 @@
 package com.github.svyaz.airlinersdailybot.bot;
 
 import com.github.svyaz.airlinersdailybot.conf.BotConfig;
-import com.github.svyaz.airlinersdailybot.logging.LogMe;
+import com.github.svyaz.airlinersdailybot.logging.LogAround;
 import com.github.svyaz.airlinersdailybot.service.PictureHolderService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +20,6 @@ import java.util.List;
 import java.util.Objects;
 
 /* TODO list:
- * + 1. При старте если не обновились данные - NPE. Сделать сообщение
- * + 2. Сохранение file_id после первой отправки картинки в holderService
- * 3. Логирование - на АОП!
  * 4. Шаблоны сообщений для caption - русский и английский. Java 21
  *      в callback.message.user нету lang_code. Можно запоминать из присланных при подписке.
  *      (plugin String manipulation)
@@ -31,7 +28,7 @@ import java.util.Objects;
  * 7. Обработка не командного текста
  * 8. ЛОгирование запросов (noSQL)
  * 9. Дату фотки заформатить на LocalDate
- * 10. Логирование апдейтера
+ * 10. Ошибку парсинга где-то ловить
  * 11. Тесты ;))
  * 12. Таймауты обновления - в конфиг
  * +-13. Хостинг
@@ -59,11 +56,8 @@ public class AirlinersBot extends TelegramLongPollingBot {
         return botName;
     }
 
-    @LogMe
     @Override
     public void onUpdateReceived(Update update) {
-        //log.info("onUpdateReceived <-");
-
         if (update.hasCallbackQuery()) {
             sendPlaneMessage(update);
         }
@@ -75,7 +69,7 @@ public class AirlinersBot extends TelegramLongPollingBot {
 
     @SneakyThrows
     private void sendPlaneMessage(Update update) {
-        //log.debug("sendPlaneMessage <-");
+        log.info("sendPlaneMessage <-");
 
         if(Objects.isNull(holderService.getEntity())) {
             log.debug("sendPlaneMessage -> no picture data yet.");
@@ -101,9 +95,10 @@ public class AirlinersBot extends TelegramLongPollingBot {
                 .ifPresent(holderService::setFileId);
     }
 
+    @LogAround
     @SneakyThrows
     private void sendUnknownCommandMessage(Update update) {
-        log.debug("sendUnknownCommandMessage <-");
+        log.info("sendUnknownCommandMessage <-");
 
         var msg = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())

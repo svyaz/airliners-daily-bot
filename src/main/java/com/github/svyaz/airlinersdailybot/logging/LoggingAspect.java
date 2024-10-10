@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -18,34 +19,17 @@ import java.util.Arrays;
 @Component
 public class LoggingAspect {
 
-//    private static final Logger LOGGER = LogManager.getLogger(LoggingAspect.class);
-//    @Pointcut("execution(* com.github.svyaz.airlinersdailybot.bot.AirlinersBot.onUpdateReceived(..))")
-//    private void loggingReceivedUpdate() {
-//    }
+    @Pointcut("@annotation(com.github.svyaz.airlinersdailybot.logging.LogAround)")
+    private void loggingAround() {
+    }
 
-//    @Around("loggingReceivedUpdate()")
-//    @Around("execution(* com.github.svyaz.airlinersdailybot.bot.AirlinersBot.onUpdateReceived(..))")
-    /*@Around("@annotation(com.github.svyaz.airlinersdailybot.logging.LogMe)")
+    @Around("loggingAround()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         String methodName = joinPoint.getSignature().getName();
         log.info("{}() <- {}", methodName, Arrays.toString(args));
-//        System.out.println("<-");
         Object result = joinPoint.proceed();
         log.info("{}() -> {}", methodName, result);
-//        System.out.println("<-");
         return result;
-    }*/
-
-    @Before("@annotation(com.github.svyaz.airlinersdailybot.logging.LogMe)")
-    public void logBefore(JoinPoint joinPoint) {
-        Object[] args = joinPoint.getArgs();
-        String methodName = joinPoint.getSignature().getName();
-        log.info("{}() <- {}", methodName, Arrays.toString(args));
-//        System.out.println("<-");
-        //Object result = joinPoint.proceed();
-        //log.info("{}() -> {}", methodName, result);
-//        System.out.println("<-");
-        //return result;
     }
 }

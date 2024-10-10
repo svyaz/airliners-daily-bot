@@ -1,5 +1,6 @@
 package com.github.svyaz.airlinersdailybot.service;
 
+import com.github.svyaz.airlinersdailybot.logging.LogAround;
 import com.github.svyaz.airlinersdailybot.mapper.PictureIdGetter;
 import com.github.svyaz.airlinersdailybot.model.PictureEntity;
 import com.github.svyaz.airlinersdailybot.parser.HtmlParser;
@@ -19,22 +20,20 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
     private final HtmlParser htmlParser;
     private final PictureIdGetter pictureIdGetter;
 
+    @LogAround
     @Override
     @Scheduled(initialDelay = 1_000, fixedDelay = 600_000)
     public void updatePictureIfNeed() {
-        log.debug("updatePictureIfNeed <-");
-
         var topPhotoPageUri = getTopPhotoPageUri();
         var pictureId = pictureIdGetter.getId(topPhotoPageUri);
 
         if (holderService.hasChanged(pictureId)) {
-            log.debug("updatePictureIfNeed: picture has been changed, new id [{}]", pictureId);
+            log.info("updatePictureIfNeed: picture has been changed, new id [{}]", pictureId);
 
             var pictureEntity = getPictureEntity(topPhotoPageUri);
             pictureEntity.setId(pictureId);
             holderService.setEntity(pictureEntity);
         }
-
     }
 
     private String getTopPhotoPageUri() {

@@ -18,8 +18,6 @@ public class PictureHolderServiceBean implements PictureHolderService {
     @Override
     @Synchronized
     public boolean hasChanged(Long id) {
-        log.info("hasChanged <- id [{}]", id);
-
         return Optional.ofNullable(pictureEntity)
                 .map(PictureEntity::getId)
                 .filter(entityId -> Objects.equals(entityId, id))
