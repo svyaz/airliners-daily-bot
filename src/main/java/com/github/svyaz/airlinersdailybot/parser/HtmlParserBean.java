@@ -40,7 +40,7 @@ public class HtmlParserBean implements HtmlParser {
         var document = Jsoup.parse(html);
 
         var pictureData = PictureData.builder()
-                .title(selectFromElementValue(document, TITLE_SELECTOR))
+                //.title(selectFromElementValue(document, TITLE_SELECTOR))
                 .photoPageUri(selectFromAttribute(document, PHOTO_PAGE_URI_SELECTOR, "content"))
                 .airline(selectFromElementValue(document, AIRLINE_SELECTOR))
                 .aircraft(selectFromElementValue(document, AIRCRAFT_SELECTOR))

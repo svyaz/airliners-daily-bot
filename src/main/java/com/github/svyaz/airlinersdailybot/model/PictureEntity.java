@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -23,4 +25,28 @@ public class PictureEntity {
     // picture content to form message caption
     private PictureData pictureData;
 
+    public Object[] getCaptionArgs() {
+        return new Object[]{
+                // title with link
+                Optional.ofNullable(pictureData.getPhotoPageUri())
+                        .map(u -> String.format("<a href='%s'>%d</a>", u, id))
+                        .orElseGet(() -> String.format("%d", id)),
+                // airline
+                Optional.ofNullable(pictureData.getAirline()).orElse("-"),
+                // aircraft
+                Optional.ofNullable(pictureData.getAircraft()).orElse("-"),
+                // registration
+                Optional.ofNullable(pictureData.getRegistration()).orElse("-"),
+                // location
+                Optional.ofNullable(pictureData.getLocation()).orElse("-"),
+                // date
+                Optional.ofNullable(pictureData.getDate()).orElse("-"),
+                // author
+                Optional.ofNullable(pictureData.getAuthor()).orElse("-"),
+                // author country
+                Optional.ofNullable(pictureData.getAuthorCountry())
+                        .map(ac -> String.format("(%s)",ac))
+                        .orElse("")
+        };
+    }
 }

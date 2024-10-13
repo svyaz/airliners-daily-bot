@@ -2,6 +2,8 @@ package com.github.svyaz.airlinersdailybot.bot;
 
 import com.github.svyaz.airlinersdailybot.conf.BotConfig;
 import com.github.svyaz.airlinersdailybot.logging.LogAround;
+import com.github.svyaz.airlinersdailybot.messages.PhotoCaptionBuilder;
+import com.github.svyaz.airlinersdailybot.model.PictureEntity;
 import com.github.svyaz.airlinersdailybot.service.PictureHolderService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -10,17 +12,22 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 /* TODO list:
- * 4. Шаблоны сообщений для caption - русский и английский. Java 21
+ * 1. Найти есть ли все-таки lang_code в callback.
+ * 2. Выносим формирование сообщений в отдельный бин
+ * 3. Отправку выносим в отдельный бин
+ * +-4. Шаблоны сообщений для caption - русский и английский. Java 21
  *      в callback.message.user нету lang_code. Можно запоминать из присланных при подписке.
  *      (plugin String manipulation)
  * 5. Команда /start
@@ -40,15 +47,20 @@ import java.util.Objects;
 @Component
 public class AirlinersBot extends TelegramLongPollingBot {
 
-    private final String botName;
+    private static final String DEFAULT_LANG_CODE = "ru";   //todo move to config
 
+    private final String botName;
     private final PictureHolderService holderService;
+    private final PhotoCaptionBuilder captionBuilder;
 
     @Autowired
-    public AirlinersBot(BotConfig botConfig, PictureHolderService holderService) {
+    public AirlinersBot(BotConfig botConfig,
+                        PictureHolderService holderService,
+                        PhotoCaptionBuilder captionBuilder) {
         super(botConfig.getBotToken());
         this.botName = botConfig.getBotName();
         this.holderService = holderService;
+        this.captionBuilder = captionBuilder;
     }
 
     @Override
@@ -70,35 +82,31 @@ public class AirlinersBot extends TelegramLongPollingBot {
     @SneakyThrows
     private void sendPlaneMessage(Update update) {
         log.info("sendPlaneMessage <-");
+        //log.info("sendPlaneMessage: lang: {}", update.getCallbackQuery().getMessage().getFrom().getLanguageCode());
 
-        if(Objects.isNull(holderService.getEntity())) {
-            log.debug("sendPlaneMessage -> no picture data yet.");
-            return;
-        }
+        var chatId = update.getCallbackQuery().getMessage().getChatId();
+        var langCode = Optional.ofNullable(update.getCallbackQuery().getMessage())
+                .map(Message::getFrom)
+                .map(User::getLanguageCode)
+                .orElse(DEFAULT_LANG_CODE);
 
-        var data = holderService.getEntity().getPictureData();
-
-        var msg = SendPhoto.builder()
-                .chatId(update.getCallbackQuery().getMessage().getChatId())
-                .photo(holderService.getInputFile())
-                .caption(String.format("%s%nAirline: %s%nAircraft: %s",
-                        data.getTitle(), data.getAirline(), data.getAircraft()
-                ))
-                .replyMarkup(getKeyboardMarkup())
-                .build();
-
-        var message = execute(msg);
-
-        message.getPhoto().stream()
-                .max(Comparator.comparing(PhotoSize::getWidth))
-                .map(PhotoSize::getFileId)
+        Optional.ofNullable(holderService.getEntity())
+                //.map(PictureEntity::getPictureData)
+                .map(entity -> buildSendPhoto(chatId, entity, langCode))
+                .map(this::executeSendPhoto)
+                .flatMap(message -> message.getPhoto().stream()
+                        .max(Comparator.comparing(PhotoSize::getWidth))
+                        .map(PhotoSize::getFileId)
+                )
                 .ifPresent(holderService::setFileId);
+        //todo orElse(сообщение об ошибке какое-то нужно)
     }
 
     @LogAround
     @SneakyThrows
     private void sendUnknownCommandMessage(Update update) {
         log.info("sendUnknownCommandMessage <-");
+        //log.info("sendUnknownCommandMessage: lang: {}", update.getMessage().getFrom().getLanguageCode());
 
         var msg = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
@@ -117,6 +125,21 @@ public class AirlinersBot extends TelegramLongPollingBot {
                                 .callbackData("SHOW")
                                 .build())))
                 .build();
+    }
+
+    private SendPhoto buildSendPhoto(Long chatId, PictureEntity entity, String langCode) {
+        return SendPhoto.builder()
+                .chatId(chatId)
+                .parseMode("HTML")
+                .photo(holderService.getInputFile())
+                .caption(captionBuilder.build(entity, langCode))
+                .replyMarkup(getKeyboardMarkup())
+                .build();
+    }
+
+    @SneakyThrows
+    private Message executeSendPhoto(SendPhoto sendPhoto) {
+        return this.execute(sendPhoto);
     }
 
 }

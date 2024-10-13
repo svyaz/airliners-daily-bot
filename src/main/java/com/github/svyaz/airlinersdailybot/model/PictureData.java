@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class PictureData {
 
     // picture title
-    private String title;
+    //private String title;
 
     // photo page uri
     private String photoPageUri;
