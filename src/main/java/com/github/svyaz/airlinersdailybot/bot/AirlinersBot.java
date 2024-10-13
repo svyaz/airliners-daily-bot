@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -24,12 +21,9 @@ import java.util.List;
 import java.util.Optional;
 
 /* TODO list:
- * 1. Найти есть ли все-таки lang_code в callback.
  * 2. Выносим формирование сообщений в отдельный бин
  * 3. Отправку выносим в отдельный бин
- * +-4. Шаблоны сообщений для caption - русский и английский. Java 21
- *      в callback.message.user нету lang_code. Можно запоминать из присланных при подписке.
- *      (plugin String manipulation)
+ * 4.
  * 5. Команда /start
  * 6. Команда /info
  * 7. Обработка не командного текста
@@ -82,16 +76,14 @@ public class AirlinersBot extends TelegramLongPollingBot {
     @SneakyThrows
     private void sendPlaneMessage(Update update) {
         log.info("sendPlaneMessage <-");
-        //log.info("sendPlaneMessage: lang: {}", update.getCallbackQuery().getMessage().getFrom().getLanguageCode());
 
         var chatId = update.getCallbackQuery().getMessage().getChatId();
-        var langCode = Optional.ofNullable(update.getCallbackQuery().getMessage())
-                .map(Message::getFrom)
+        var langCode = Optional.ofNullable(update.getCallbackQuery())
+                .map(CallbackQuery::getFrom)
                 .map(User::getLanguageCode)
                 .orElse(DEFAULT_LANG_CODE);
 
         Optional.ofNullable(holderService.getEntity())
-                //.map(PictureEntity::getPictureData)
                 .map(entity -> buildSendPhoto(chatId, entity, langCode))
                 .map(this::executeSendPhoto)
                 .flatMap(message -> message.getPhoto().stream()
