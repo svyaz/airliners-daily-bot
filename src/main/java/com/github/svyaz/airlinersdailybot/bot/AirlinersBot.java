@@ -23,25 +23,19 @@ import java.util.Optional;
 /* TODO list:
  * 2. Выносим формирование сообщений в отдельный бин
  * 3. Отправку выносим в отдельный бин
- * 4.
  * 5. Команда /start
  * 6. Команда /info
  * 7. Обработка не командного текста
  * 8. ЛОгирование запросов (noSQL)
- * 9. Дату фотки заформатить на LocalDate
  * 10. Ошибку парсинга где-то ловить
  * 11. Тесты ;))
  * 12. Таймауты обновления - в конфиг
- * +-13. Хостинг
- * 14. Тестовый бот!
  * 15. Фича с БД - запоминать какую последнюю картинку показывали юзеру и повторно не отправлять.
  *
  * */
 @Slf4j
 @Component
 public class AirlinersBot extends TelegramLongPollingBot {
-
-    private static final String DEFAULT_LANG_CODE = "ru";   //todo move to config
 
     private final String botName;
     private final PictureHolderService holderService;
@@ -81,7 +75,7 @@ public class AirlinersBot extends TelegramLongPollingBot {
         var langCode = Optional.ofNullable(update.getCallbackQuery())
                 .map(CallbackQuery::getFrom)
                 .map(User::getLanguageCode)
-                .orElse(DEFAULT_LANG_CODE);
+                .orElse(null);
 
         Optional.ofNullable(holderService.getEntity())
                 .map(entity -> buildSendPhoto(chatId, entity, langCode))

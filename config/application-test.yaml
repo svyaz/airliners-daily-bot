@@ -9,3 +9,10 @@ bot:
 client:
   baseUrl: https://www.airliners.net
   maxBufferSize: 1024000
+
+app:
+  defaultLangCode: ru
+
+logging.level.root: info
+logging.level.com.github.svyaz: debug
+logging.level.org.telegram: trace
