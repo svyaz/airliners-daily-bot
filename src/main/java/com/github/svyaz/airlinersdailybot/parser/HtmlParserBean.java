@@ -14,7 +14,6 @@ import java.util.Optional;
 public class HtmlParserBean implements HtmlParser {
 
     private static final String TOP_PHOTO_LINK_SELECTOR = "div.hp-t5-row-photo a";
-    private static final String TITLE_SELECTOR = "h1.photo-details-page-title span";
     private static final String PHOTO_PAGE_URI_SELECTOR = "meta[property='og:url']";
     private static final String AIRLINE_SELECTOR = "div.pib-section-content-left a[href*=airline]";
     private static final String AIRCRAFT_SELECTOR = "div.pib-section-content-left a[href*=aircraft]";
@@ -40,7 +39,6 @@ public class HtmlParserBean implements HtmlParser {
         var document = Jsoup.parse(html);
 
         var pictureData = PictureData.builder()
-                //.title(selectFromElementValue(document, TITLE_SELECTOR))
                 .photoPageUri(selectFromAttribute(document, PHOTO_PAGE_URI_SELECTOR, "content"))
                 .airline(selectFromElementValue(document, AIRLINE_SELECTOR))
                 .aircraft(selectFromElementValue(document, AIRCRAFT_SELECTOR))

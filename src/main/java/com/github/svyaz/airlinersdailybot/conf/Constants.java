@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
 
+    public static final String PARSE_MODE = "HTML";
     public static final String START_COMMAND = "/start";
     public static final String HELP_COMMAND = "/help";
 

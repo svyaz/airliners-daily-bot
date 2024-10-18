@@ -1,5 +1,6 @@
 package com.github.svyaz.airlinersdailybot.handler;
 
+import com.github.svyaz.airlinersdailybot.conf.Constants;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,7 +14,7 @@ public class HelpHandlerBean extends AbstractUpdateHandler {
     @Override
     public void handle(Update update, AbsSender sender) {
         var message = SendMessage.builder()
-                .parseMode("HTML")
+                .parseMode(Constants.PARSE_MODE)
                 .chatId(update.getMessage().getChatId())
                 .text(getMessage("help.text", null))
                 .replyMarkup(getButtons())
