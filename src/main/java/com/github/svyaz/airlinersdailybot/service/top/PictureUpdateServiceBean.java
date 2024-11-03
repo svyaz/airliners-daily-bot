@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.service;
+package com.github.svyaz.airlinersdailybot.service.top;
 
 import com.github.svyaz.airlinersdailybot.logging.LogAround;
 import com.github.svyaz.airlinersdailybot.mapper.PictureIdGetter;
@@ -42,7 +42,6 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(htmlParser::getLargePicturePageUri)
-                .log()
                 .block();
     }
 
@@ -52,7 +51,6 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(htmlParser::getPictureData)
-                .log()
                 .block();
     }
 

@@ -36,7 +36,7 @@ public class UpdateHandlerResolverBean implements UpdateHandlerResolver {
 
             return switch (cbDataCommand) {
                 case SHOW_TOP_CB_DATA -> handlers.get(TOP_PHOTO_HANDLER);
-                case SHOW_PREV_CB_DATA, SHOW_NEXT_CB_DATA -> handlers.get(SEARCH_RESULT_PHOTO_HANDLER);
+                case SHOW_NEXT_CB_DATA -> handlers.get(SEARCH_NEXT_PHOTO_HANDLER);
                 default -> handlers.get(UNKNOWN_COMMAND_HANDLER);
             };
         }

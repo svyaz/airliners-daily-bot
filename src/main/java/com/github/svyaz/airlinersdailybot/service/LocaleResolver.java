@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.mapper;
+package com.github.svyaz.airlinersdailybot.service;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 

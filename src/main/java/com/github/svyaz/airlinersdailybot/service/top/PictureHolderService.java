@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.service;
+package com.github.svyaz.airlinersdailybot.service.top;
 
 import com.github.svyaz.airlinersdailybot.model.PictureEntity;
 import org.telegram.telegrambots.meta.api.objects.InputFile;

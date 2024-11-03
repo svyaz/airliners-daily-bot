@@ -19,6 +19,9 @@ public class PictureEntity {
     // photo file uri
     private String photoFileUri;
 
+    // next file uri
+    private String nextPageUri;
+
     // photo id, if it has been already uploaded to telegram server
     private String fileId;
 

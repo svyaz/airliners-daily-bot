@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.service;
+package com.github.svyaz.airlinersdailybot.service.top;
 
 import com.github.svyaz.airlinersdailybot.model.PictureEntity;
 import lombok.Synchronized;
@@ -44,7 +44,7 @@ public class PictureHolderServiceBean implements PictureHolderService {
 
     @Override
     @Synchronized
-    public InputFile getInputFile() {
+    public InputFile getInputFile() {   //todo move to PictureEntity
         var fileId = Optional.ofNullable(pictureEntity.getFileId())
                 .orElseGet(() -> pictureEntity.getPhotoFileUri());
         return new InputFile(fileId);

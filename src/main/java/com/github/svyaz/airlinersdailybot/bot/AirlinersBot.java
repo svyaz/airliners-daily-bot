@@ -2,7 +2,7 @@ package com.github.svyaz.airlinersdailybot.bot;
 
 import com.github.svyaz.airlinersdailybot.conf.BotConfig;
 import com.github.svyaz.airlinersdailybot.handler.UpdateHandlerResolver;
-import com.github.svyaz.airlinersdailybot.mapper.LocaleResolver;
+import com.github.svyaz.airlinersdailybot.service.LocaleResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -14,6 +14,10 @@ import java.util.Optional;
 public class HtmlParserBean implements HtmlParser {
 
     private static final String TOP_PHOTO_LINK_SELECTOR = "div.hp-t5-row-photo a";
+
+    private static final String SEARCH_FIRST_PHOTO_LINK_SELECTOR = "div.ps-v2-results-photo a";
+    private static final String SEARCH_NEXT_PAGE_URI_SELECTOR = "div.pdcp-pager.pdcp-pager-next a";
+
     private static final String PHOTO_PAGE_URI_SELECTOR = "meta[property='og:url']";
     private static final String AIRLINE_SELECTOR = "div.pib-section-content-left a[href*=airline]";
     private static final String AIRCRAFT_SELECTOR = "div.pib-section-content-left a[href*=aircraft]";
@@ -35,6 +39,15 @@ public class HtmlParserBean implements HtmlParser {
     }
 
     @Override
+    public String getFirstSearchResultUri(String html) {
+        return Optional.ofNullable(Jsoup.parse(html)
+                        .select(SEARCH_FIRST_PHOTO_LINK_SELECTOR)
+                        .first())
+                .map(e -> e.attr("href"))
+                .orElseThrow(() -> new ParseException("Pictures by keywords not found"));
+    }
+
+    @Override
     public PictureEntity getPictureData(String html) {
         var document = Jsoup.parse(html);
 
@@ -52,6 +65,7 @@ public class HtmlParserBean implements HtmlParser {
 
         return PictureEntity.builder()
                 .photoFileUri(selectFromAttribute(document, PHOTO_FILE_URI_SELECTOR, "src"))
+                .nextPageUri(selectFromAttribute(document, SEARCH_NEXT_PAGE_URI_SELECTOR, "href"))
                 .pictureData(pictureData)
                 .build();
     }

@@ -1,7 +1,7 @@
 package com.github.svyaz.airlinersdailybot.handler;
 
 import com.github.svyaz.airlinersdailybot.conf.Constants;
-import com.github.svyaz.airlinersdailybot.service.PictureHolderService;
+import com.github.svyaz.airlinersdailybot.service.top.PictureHolderService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
