@@ -1,16 +1,20 @@
 package com.github.svyaz.airlinersdailybot.handler;
 
 import com.github.svyaz.airlinersdailybot.conf.Constants;
+import com.github.svyaz.airlinersdailybot.errors.ParseException;
 import com.github.svyaz.airlinersdailybot.service.client.AirlinersClient;
 import com.github.svyaz.airlinersdailybot.service.usercache.UserCacheHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service(UpdateHandler.SEARCH_PHOTO_HANDLER)
 public class SearchPhotoHandlerBean extends AbstractUpdateHandler {
@@ -22,26 +26,35 @@ public class SearchPhotoHandlerBean extends AbstractUpdateHandler {
     @Override
     public void handle(Update update, AbsSender sender) {
         var keywords = update.getMessage().getText();
+        var chatId = update.getMessage().getChatId();
 
-        //todo catch SearchException here ("nothing found")
-        var pictureEntity = airlinersClient.getFirstSearchResult(keywords);
+        try {
+            var pictureEntity = airlinersClient.getFirstSearchResult(keywords);
 
-        userCacheHolder.setUserNextSearchResultUri(
-                update.getMessage().getFrom().getId(),
-                update.getMessage().getChatId(),
-                pictureEntity.getNextPageUri()
-        );
+            userCacheHolder.setUserNextSearchResultUri(
+                    update.getMessage().getFrom().getId(),
+                    chatId,
+                    pictureEntity.getNextPageUri()
+            );
 
-        var photo = SendPhoto.builder()
-                .parseMode(Constants.PARSE_MODE)
-                .chatId(update.getMessage().getChatId())
-                .photo(new InputFile(pictureEntity.getPhotoFileUri()))
-                .caption(getMessage("photo.caption", pictureEntity.getCaptionArgs()))
-                .replyMarkup(getButtons(pictureEntity))
-                .build();
+            sender.execute(SendPhoto.builder()
+                    .parseMode(Constants.PARSE_MODE)
+                    .chatId(chatId)
+                    .photo(new InputFile(pictureEntity.getPhotoFileUri()))
+                    .caption(getMessage("photo.caption", pictureEntity.getCaptionArgs()))
+                    .replyMarkup(getButtons(pictureEntity))
+                    .build());
 
-        sender.execute(photo);
+        } catch (ParseException exception) {
+            log.error(exception.getMessage());
 
-        //todo если ничего не нашлось - надо сообщение отправить!
+            sender.execute(SendMessage.builder()
+                    .parseMode(Constants.PARSE_MODE)
+                    .chatId(chatId)
+                    .text(getMessage("err.search.not-found", null))
+                    .replyMarkup(getButtons())
+                    .build());
+        }
     }
+
 }
