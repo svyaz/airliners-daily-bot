@@ -7,5 +7,5 @@ public interface HtmlParser {
 
     String getFirstSearchResultUri(String html);
 
-    PictureEntity getPictureData(String html);
+    PictureEntity getPictureEntity(String html);
 }

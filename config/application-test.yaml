@@ -20,4 +20,4 @@ app:
 logging.level.root: info
 logging.level.com.github.svyaz: debug
 logging.level.org.telegram: trace
-logging.level.org.springframework.web: trace
+#logging.level.org.springframework.web: trace

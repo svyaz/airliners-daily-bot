@@ -1,7 +1,6 @@
 package com.github.svyaz.airlinersdailybot.service.search;
 
 import com.github.svyaz.airlinersdailybot.errors.ParseException;
-import com.github.svyaz.airlinersdailybot.mapper.PictureIdGetter;
 import com.github.svyaz.airlinersdailybot.model.PictureEntity;
 import com.github.svyaz.airlinersdailybot.parser.HtmlParser;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +21,12 @@ public class PictureSearchServiceBean implements PictureSearchService {
 
     private final HtmlParser htmlParser;
 
-    private final PictureIdGetter pictureIdGetter;
-
     @Override
     public PictureEntity search(String keywords) {
         try {
+            //todo refactor with AirlinersClient
             var firstResultUri = getSearchFirstResultUri(keywords);
-            var pictureEntity = getPictureEntity(firstResultUri);
-            pictureEntity.setId(pictureIdGetter.getId(pictureEntity.getPictureData().getPhotoPageUri()));
-
-            return pictureEntity;
+            return getPictureEntity(firstResultUri);
         } catch (ParseException exception) {
             log.info("searchFirstResultUri: {}", exception.getMessage());
             return null; //todo message "nothing found"
@@ -67,11 +62,11 @@ public class PictureSearchServiceBean implements PictureSearchService {
                 .bodyToMono(String.class);
     }
 
-    private PictureEntity getPictureEntity(String uri) {
+    @Override
+    public PictureEntity getPictureEntity(String uri) {
         log.info("getPictureEntity <- {}", uri);
         return getQuery(uri)
-                //.log()
-                .map(htmlParser::getPictureData)
+                .map(htmlParser::getPictureEntity)
                 .block();
     }
 

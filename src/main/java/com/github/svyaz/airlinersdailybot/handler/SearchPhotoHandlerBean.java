@@ -2,6 +2,7 @@ package com.github.svyaz.airlinersdailybot.handler;
 
 import com.github.svyaz.airlinersdailybot.conf.Constants;
 import com.github.svyaz.airlinersdailybot.service.search.PictureSearchService;
+import com.github.svyaz.airlinersdailybot.service.usercache.UserCacheHolder;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,21 @@ public class SearchPhotoHandlerBean extends AbstractUpdateHandler {
     @Autowired
     private PictureSearchService searchService;
 
+    @Autowired
+    private UserCacheHolder userCacheHolder;
+
     @SneakyThrows
     @Override
     public void handle(Update update, AbsSender sender) {
         var keywords = update.getMessage().getText();
 
         var pictureEntity = searchService.search(keywords);
+
+        userCacheHolder.setUserNextSearchResultUri(
+                update.getMessage().getFrom().getId(),
+                update.getMessage().getChatId(),
+                pictureEntity.getNextPageUri()
+        );
 
         var photo = SendPhoto.builder()
                 .parseMode(Constants.PARSE_MODE)

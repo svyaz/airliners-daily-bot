@@ -50,8 +50,8 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class)
-                .map(htmlParser::getPictureData)
-                .block();
+                .map(htmlParser::getPictureEntity)
+                .block();   //todo Метод дублируется
     }
 
 }

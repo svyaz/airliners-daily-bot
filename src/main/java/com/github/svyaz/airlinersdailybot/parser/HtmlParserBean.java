@@ -1,16 +1,20 @@
 package com.github.svyaz.airlinersdailybot.parser;
 
 import com.github.svyaz.airlinersdailybot.errors.ParseException;
+import com.github.svyaz.airlinersdailybot.mapper.PictureIdGetter;
 import com.github.svyaz.airlinersdailybot.model.PictureData;
 import com.github.svyaz.airlinersdailybot.model.PictureEntity;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Component
+@RequiredArgsConstructor
 public class HtmlParserBean implements HtmlParser {
 
     private static final String TOP_PHOTO_LINK_SELECTOR = "div.hp-t5-row-photo a";
@@ -28,6 +32,8 @@ public class HtmlParserBean implements HtmlParser {
     private static final String AUTHOR_SELECTOR = "div.pib-section-photographer a.ua-name-content";
     private static final String AUTHOR_COUNTRY_SELECTOR = "div.pib-section-photographer span.ua-country";
     private static final String PHOTO_FILE_URI_SELECTOR = "div.pdp-image-wrapper img";
+
+    private final PictureIdGetter idGetter;
 
     @Override
     public String getLargePicturePageUri(String html) {
@@ -48,7 +54,7 @@ public class HtmlParserBean implements HtmlParser {
     }
 
     @Override
-    public PictureEntity getPictureData(String html) {
+    public PictureEntity getPictureEntity(String html) {
         var document = Jsoup.parse(html);
 
         var pictureData = PictureData.builder()
@@ -64,6 +70,7 @@ public class HtmlParserBean implements HtmlParser {
                 .build();
 
         return PictureEntity.builder()
+                .id(idGetter.getId(pictureData.getPhotoPageUri()))
                 .photoFileUri(selectFromAttribute(document, PHOTO_FILE_URI_SELECTOR, "src"))
                 .nextPageUri(selectFromAttribute(document, SEARCH_NEXT_PAGE_URI_SELECTOR, "href"))
                 .pictureData(pictureData)
@@ -81,6 +88,7 @@ public class HtmlParserBean implements HtmlParser {
         return Optional.ofNullable(document)
                 .map(d -> d.select(query))
                 .map(e -> e.attr(attrName))
+                .filter(Predicate.not(String::isEmpty))
                 .orElse(null);
     }
 }

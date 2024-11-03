@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PictureData {
 
-    // picture title
-    //private String title;
-
     // photo page uri
     private String photoPageUri;
 
