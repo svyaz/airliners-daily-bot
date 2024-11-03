@@ -44,9 +44,7 @@ public class PictureHolderServiceBean implements PictureHolderService {
 
     @Override
     @Synchronized
-    public InputFile getInputFile() {   //todo move to PictureEntity
-        var fileId = Optional.ofNullable(pictureEntity.getFileId())
-                .orElseGet(() -> pictureEntity.getPhotoFileUri());
-        return new InputFile(fileId);
+    public InputFile getInputFile() {
+        return pictureEntity.getInputFile();
     }
 }

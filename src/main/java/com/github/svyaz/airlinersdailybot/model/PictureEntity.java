@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 
 import java.util.Optional;
 
@@ -48,8 +49,14 @@ public class PictureEntity {
                 Optional.ofNullable(pictureData.getAuthor()).orElse("-"),
                 // author country
                 Optional.ofNullable(pictureData.getAuthorCountry())
-                        .map(ac -> String.format("(%s)",ac))
+                        .map(ac -> String.format("(%s)", ac))
                         .orElse("")
         };
+    }
+
+    public InputFile getInputFile() {
+        return Optional.ofNullable(fileId)
+                .map(InputFile::new)
+                .orElseGet(() -> new InputFile(photoFileUri));
     }
 }
