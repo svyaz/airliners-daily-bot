@@ -26,13 +26,14 @@ public class SearchPhotoHandlerBean extends AbstractUpdateHandler {
     @Override
     public void handle(Update update, AbsSender sender) {
         var keywords = update.getMessage().getText();
+        var userId = update.getMessage().getFrom().getId();
         var chatId = update.getMessage().getChatId();
 
         try {
             var pictureEntity = airlinersClient.getFirstSearchResult(keywords);
 
             userCacheHolder.setUserNextSearchResultUri(
-                    update.getMessage().getFrom().getId(),
+                    userId,
                     chatId,
                     pictureEntity.getNextPageUri()
             );
@@ -47,6 +48,8 @@ public class SearchPhotoHandlerBean extends AbstractUpdateHandler {
 
         } catch (ParseException exception) {
             log.error(exception.getMessage());
+
+            userCacheHolder.setUserNextSearchResultUri(userId, chatId, null);
 
             sender.execute(SendMessage.builder()
                     .parseMode(Constants.PARSE_MODE)
