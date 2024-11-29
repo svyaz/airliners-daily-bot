@@ -11,17 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.*;
 
 import java.util.Optional;
 
-/* TODO list:
- * 2. Выносим формирование сообщений в отдельный бин
- * 3. Отправку выносим в отдельный бин
- * 7. Обработка не командного текста
- * 8. ЛОгирование запросов (noSQL)
- * 10. Ошибку парсинга где-то ловить
- * 11. Тесты ;))
- * 12. Таймауты обновления - в конфиг
- * 15. Фича с БД - запоминать какую последнюю картинку показывали юзеру и повторно не отправлять.
- *
- * */
 @Slf4j
 @Component
 public class AirlinersBot extends TelegramLongPollingBot {
