@@ -21,10 +21,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.9.0'
+    implementation 'org.liquibase:liquibase-core:4.30.0'
     implementation 'org.jsoup:jsoup:1.18.1'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'com.h2database:h2:2.3.232'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
