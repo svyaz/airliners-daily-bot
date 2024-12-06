@@ -1,13 +1,13 @@
-package com.github.svyaz.airlinersdailybot.bot;
+package com.github.svyaz.airlinersbot.adapter.bot;
 
-import com.github.svyaz.airlinersdailybot.conf.BotConfig;
+import com.github.svyaz.airlinersdailybot.conf.properties.BotProperties;
 import com.github.svyaz.airlinersdailybot.handler.UpdateHandlerResolver;
 import com.github.svyaz.airlinersdailybot.service.LocaleResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
@@ -20,11 +20,11 @@ public class AirlinersBot extends TelegramLongPollingBot {
     private final UpdateHandlerResolver updateHandlerResolver;
 
     @Autowired
-    public AirlinersBot(BotConfig botConfig,
+    public AirlinersBot(BotProperties botProperties,
                         LocaleResolver localeResolver,
                         UpdateHandlerResolver updateHandlerResolver) {
-        super(botConfig.getBotToken());
-        this.botName = botConfig.getBotName();
+        super(botProperties.getBotToken());
+        this.botName = botProperties.getBotName();
         this.localeResolver = localeResolver;
         this.updateHandlerResolver = updateHandlerResolver;
     }
