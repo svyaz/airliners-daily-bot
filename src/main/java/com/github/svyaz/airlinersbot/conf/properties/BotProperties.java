@@ -1,12 +1,12 @@
-package com.github.svyaz.airlinersdailybot.conf;
+package com.github.svyaz.airlinersbot.conf.properties;
 
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+@Data
 @Configuration
-@Getter
-public class BotConfig {
+public class BotProperties {
 
     @Value("${bot.name}")
     private String botName;

@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.service;
+package com.github.svyaz.airlinersbot.adapter.locale;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 

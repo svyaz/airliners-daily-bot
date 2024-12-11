@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot;
+package com.github.svyaz.airlinersbot;
 
 import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
@@ -7,7 +7,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-@SpringBootApplication(scanBasePackages = {"com.github.svyaz.airlinersdailybot"})
+@SpringBootApplication(scanBasePackages = {"com.github.svyaz.airlinersbot"})
 public class BotApplication {
 
 	@SneakyThrows

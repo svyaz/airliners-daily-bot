@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: AirlinersDaily-Test-Bot
+  r2dbc:
+    url: r2dbc:h2:mem:///~/db/airliners-bot-db
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
 
 bot:
   name: AirlinersDaily-Test-Bot
