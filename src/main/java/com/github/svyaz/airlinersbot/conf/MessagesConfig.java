@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.conf;
+package com.github.svyaz.airlinersbot.conf;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

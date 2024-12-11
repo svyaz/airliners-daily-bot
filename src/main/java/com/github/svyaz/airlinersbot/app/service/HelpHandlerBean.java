@@ -2,19 +2,31 @@ package com.github.svyaz.airlinersbot.app.service;
 
 import com.github.svyaz.airlinersbot.app.domain.request.Request;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
+import com.github.svyaz.airlinersbot.app.domain.response.InlineButton;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import org.springframework.stereotype.Service;
 
-@Service
-public class HelpHandlerBean implements RequestHandler<TextResponse> {
+import java.util.List;
 
-    @Override
-    public RequestType myType() {
-        return RequestType.HELP;
-    }
+import static com.github.svyaz.airlinersbot.conf.properties.Constants.*;
+
+@Service
+public class HelpHandlerBean extends AbstractRequestHandler<TextResponse> {
+
+    static final RequestType requestType = RequestType.HELP;
 
     @Override
     public TextResponse handle(Request request) {
-        return new TextResponse(request.message().getChatId(), "Hi", null);
+        return new TextResponse(
+                request.message().getChatId(),
+                getLocalizedMessage("help.text"),
+                List.of(
+                        List.of(
+                                new InlineButton(
+                                        SHOW_TOP_CB_DATA,
+                                        getLocalizedMessage("button.show-top")
+                                )
+                        )
+                ));
     }
 }
