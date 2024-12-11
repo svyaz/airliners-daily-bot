@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.service;
+package com.github.svyaz.airlinersbot.adapter.locale;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;

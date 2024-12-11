@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class HelpHandlerBean implements RequestHandler<TextResponse> {
 
-    private final RequestType requestType = RequestType.HELP;
+    @Override
+    public RequestType myType() {
+        return RequestType.HELP;
+    }
 
     @Override
     public TextResponse handle(Request request) {
-        return null;
+        return new TextResponse(request.message().getChatId(), "Hi", null);
     }
-
 }

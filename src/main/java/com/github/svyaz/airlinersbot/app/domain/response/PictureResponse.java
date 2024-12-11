@@ -12,7 +12,7 @@ public class PictureResponse extends Response {
     private Picture picture;
 
     public PictureResponse(Long chatId, String text, Picture picture) {
-        super(chatId, text);
+        super(chatId, text, null);
         this.picture = picture;
     }
 }

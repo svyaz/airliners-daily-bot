@@ -1,13 +1,13 @@
 package com.github.svyaz.airlinersdailybot.model.db;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+//import jakarta.persistence.Entity;
+//simport jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "Plane")
+//@Entity
+//@Table(name = "Plane")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

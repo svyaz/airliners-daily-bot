@@ -1,6 +1,7 @@
-package com.github.svyaz.airlinersbot.adapter.mapper;
+package com.github.svyaz.airlinersbot.adapter.response.mapper.keyboard;
 
 import com.github.svyaz.airlinersbot.app.domain.response.InlineButton;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -10,9 +11,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class AbstractResponseMapper<T> implements ResponseMapper<T> {
+@Component
+public class KeyboardMapperBean implements KeyboardMapper {
 
-    protected ReplyKeyboard mapReplyKeyboard(List<List<InlineButton>> buttons) {
+    @Override
+    public ReplyKeyboard apply(List<List<InlineButton>> buttons) {
         return Optional.ofNullable(buttons)
                 .filter(Predicate.not(List::isEmpty))
                 .map(rows -> rows.stream()
@@ -33,5 +36,4 @@ public abstract class AbstractResponseMapper<T> implements ResponseMapper<T> {
                 .callbackData(button.callbackData())
                 .build();
     }
-
 }
