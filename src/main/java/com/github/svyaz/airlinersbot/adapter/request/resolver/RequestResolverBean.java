@@ -15,6 +15,7 @@ public class RequestResolverBean implements RequestResolver {
         // Resolve text commands
         if (update.hasMessage()) {
             var type = switch (update.getMessage().getText()) {
+                case START_COMMAND -> RequestType.START;
                 case HELP_COMMAND -> RequestType.HELP;
                 case SUBSCRIBE_TOP_COMMAND -> RequestType.SUBSCRIBE_TOP;
                 case UNSUBSCRIBE_TOP_COMMAND -> RequestType.UNSUBSCRIBE_TOP;
