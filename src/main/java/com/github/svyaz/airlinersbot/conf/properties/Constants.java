@@ -1,9 +1,8 @@
 package com.github.svyaz.airlinersbot.conf.properties;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class Constants {
 
     public static final String PARSE_MODE = "HTML";

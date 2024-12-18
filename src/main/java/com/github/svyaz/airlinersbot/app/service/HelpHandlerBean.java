@@ -13,7 +13,10 @@ import static com.github.svyaz.airlinersbot.conf.properties.Constants.*;
 @Service
 public class HelpHandlerBean extends AbstractRequestHandler<TextResponse> {
 
-    static final RequestType requestType = RequestType.HELP;
+    @Override
+    public RequestType myType() {
+        return RequestType.HELP;
+    }
 
     @Override
     public TextResponse handle(Request request) {

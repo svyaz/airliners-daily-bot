@@ -1,16 +1,15 @@
 package com.github.svyaz.airlinersbot.conf.properties;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Data
-@Configuration
+@Component
+@ConfigurationProperties(prefix = "bot")
 public class BotProperties {
 
-    @Value("${bot.name}")
-    private String botName;
+    private String name;
 
-    @Value("${bot.token}")
-    private String botToken;
+    private String token;
 }

@@ -1,8 +1,5 @@
-package com.github.svyaz.airlinersbot.datastore.model;
+package com.github.svyaz.airlinersbot.app.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +11,12 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "user")
-public class UserEntity {
+public class User {
 
-    @Id
     private Long id;
     private String userName;
     private String firstName;
     private String lastName;
     private String languageCode;
     private LocalDateTime registerTime;
-    private LocalDateTime lastVisitTime;
 }

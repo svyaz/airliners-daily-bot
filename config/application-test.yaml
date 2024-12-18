@@ -4,12 +4,21 @@ server:
 spring:
   application:
     name: AirlinersDaily-Test-Bot
-  r2dbc:
-    url: r2dbc:h2:mem:///~/db/airliners-bot-db
+  datasource:
+    url: jdbc:h2:file:./test
     username: sa
     password:
+    driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    properties.hibernate:
+      globally_quoted_identifiers: true
+      hbm2ddl.auto: update
+      show_sql: true
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
 
 bot:
   name: AirlinersDaily-Test-Bot
@@ -23,7 +32,9 @@ client:
 app:
   defaultLangCode: ru
 
-logging.level.root: info
-logging.level.com.github.svyaz: debug
-logging.level.org.telegram: trace
-#logging.level.org.springframework.web: trace
+logging:
+  level:
+    root: info
+    com.github.svyaz: debug
+    org.telegram: trace
+#    org.springframework.web: trace
