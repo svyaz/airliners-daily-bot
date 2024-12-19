@@ -14,34 +14,41 @@ public class RequestResolverBean implements RequestResolver {
     public Request apply(Update update) {
         // Resolve text commands
         if (update.hasMessage()) {
-            var type = switch (update.getMessage().getText()) {
-                case START_COMMAND -> RequestType.START;
-                case HELP_COMMAND -> RequestType.HELP;
-                case SUBSCRIBE_TOP_COMMAND -> RequestType.SUBSCRIBE_TOP;
-                case UNSUBSCRIBE_TOP_COMMAND -> RequestType.UNSUBSCRIBE_TOP;
-                default -> RequestType.SEARCH;
-            };
-
-            var user = update.getMessage().getFrom();
-            var message = update.getMessage();
-
-            return new Request(type, user, message);
+            return new Request(
+                    getTextCommandType(update),
+                    update.getMessage().getFrom(),
+                    update.getMessage()
+            );
         }
 
         // Resolve callbacks
         if (update.hasCallbackQuery()) {
-            var type = switch (update.getCallbackQuery().getData()) {
-                case SHOW_TOP_CB_DATA -> RequestType.TOP;
-                case SHOW_NEXT_CB_DATA -> RequestType.SEARCH_NEXT;
-                default -> RequestType.UNKNOWN_COMMAND;
-            };
-
-            var user = update.getCallbackQuery().getFrom();
-            var message = update.getCallbackQuery().getMessage();
-
-            return new Request(type, user, message);
+            return new Request(
+                    getCallbackCommandType(update),
+                    update.getCallbackQuery().getFrom(),
+                    update.getCallbackQuery().getMessage()
+            );
         }
 
         return new Request(RequestType.UNKNOWN_COMMAND, null, null);
     }
+
+    private RequestType getTextCommandType(Update update) {
+        return switch (update.getMessage().getText()) {
+            case START_COMMAND -> RequestType.START;
+            case HELP_COMMAND -> RequestType.HELP;
+            case SUBSCRIBE_TOP_COMMAND -> RequestType.SUBSCRIBE_TOP;
+            case UNSUBSCRIBE_TOP_COMMAND -> RequestType.UNSUBSCRIBE_TOP;
+            default -> RequestType.SEARCH;
+        };
+    }
+
+    private RequestType getCallbackCommandType(Update update) {
+        return switch (update.getCallbackQuery().getData()) {
+            case SHOW_TOP_CB_DATA -> RequestType.TOP;
+            case SHOW_NEXT_CB_DATA -> RequestType.SEARCH_NEXT;
+            default -> RequestType.UNKNOWN_COMMAND;
+        };
+    }
+
 }
