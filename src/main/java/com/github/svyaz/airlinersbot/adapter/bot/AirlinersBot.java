@@ -9,19 +9,22 @@ import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
 import com.github.svyaz.airlinersbot.conf.properties.BotProperties;
 import com.github.svyaz.airlinersbot.adapter.locale.LocaleResolver;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @Component
-public class AirlinersBot extends TelegramLongPollingBot {
+public class AirlinersBot extends TelegramLongPollingBot implements InitializingBean {
 
     private final String botName;
     private final LocaleResolver localeResolver;
@@ -40,6 +43,12 @@ public class AirlinersBot extends TelegramLongPollingBot {
         this.requestResolver = requestResolver;
         this.requestHandlers = requestHandlers;
         this.responseMappers = responseMappers;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+        botsApi.registerBot(this);
     }
 
     @Override
