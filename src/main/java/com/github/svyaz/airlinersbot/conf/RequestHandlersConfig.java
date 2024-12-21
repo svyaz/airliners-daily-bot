@@ -2,7 +2,7 @@ package com.github.svyaz.airlinersbot.conf;
 
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
-import com.github.svyaz.airlinersbot.app.service.RequestHandler;
+import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

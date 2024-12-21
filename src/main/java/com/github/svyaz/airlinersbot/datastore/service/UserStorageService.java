@@ -8,5 +8,5 @@ public interface UserStorageService {
 
     Optional<User> findUser(Long id);
 
-    void save(User user);
+    User save(User user);
 }

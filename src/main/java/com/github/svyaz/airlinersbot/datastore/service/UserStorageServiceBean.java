@@ -22,9 +22,11 @@ public class UserStorageServiceBean implements UserStorageService {
     }
 
     @Override
-    public void save(User user) {
-        repository.saveAndFlush(
-                mapper.toUserEntity(user)
-        );
+    public User save(User user) {
+        return Optional.of(user)
+                .map(mapper::toUserEntity)
+                .map(repository::saveAndFlush)
+                .map(mapper::toUser)
+                .orElse(null);
     }
 }

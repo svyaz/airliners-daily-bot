@@ -5,7 +5,7 @@ import com.github.svyaz.airlinersbot.adapter.response.mapper.ResponseMapper;
 import com.github.svyaz.airlinersbot.adapter.request.resolver.RequestResolver;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
-import com.github.svyaz.airlinersbot.app.service.RequestHandler;
+import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
 import com.github.svyaz.airlinersbot.conf.properties.BotProperties;
 import com.github.svyaz.airlinersbot.adapter.locale.LocaleResolver;
 import lombok.extern.slf4j.Slf4j;

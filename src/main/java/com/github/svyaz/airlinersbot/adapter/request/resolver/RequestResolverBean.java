@@ -1,14 +1,19 @@
 package com.github.svyaz.airlinersbot.adapter.request.resolver;
 
+import com.github.svyaz.airlinersbot.adapter.response.mapper.TlgUserMapper;
 import com.github.svyaz.airlinersbot.app.domain.request.Request;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.svyaz.airlinersbot.conf.properties.Constants.*;
 
 @Component
+@RequiredArgsConstructor
 public class RequestResolverBean implements RequestResolver {
+
+    private final TlgUserMapper userMapper;
 
     @Override
     public Request apply(Update update) {
@@ -16,7 +21,7 @@ public class RequestResolverBean implements RequestResolver {
         if (update.hasMessage()) {
             return new Request(
                     getTextCommandType(update),
-                    update.getMessage().getFrom(),
+                    userMapper.toUser(update.getMessage().getFrom()),
                     update.getMessage()
             );
         }
@@ -25,7 +30,7 @@ public class RequestResolverBean implements RequestResolver {
         if (update.hasCallbackQuery()) {
             return new Request(
                     getCallbackCommandType(update),
-                    update.getCallbackQuery().getFrom(),
+                    userMapper.toUser(update.getCallbackQuery().getFrom()),
                     update.getCallbackQuery().getMessage()
             );
         }
