@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersdailybot.conf;
+package com.github.svyaz.airlinersbot.conf;
 
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;

@@ -4,7 +4,7 @@ import com.github.svyaz.airlinersbot.app.domain.request.Request;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.InlineButton;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
-import com.github.svyaz.airlinersbot.app.service.UserService;
+import com.github.svyaz.airlinersbot.app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

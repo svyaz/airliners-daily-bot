@@ -1,10 +1,7 @@
-package com.github.svyaz.airlinersdailybot.parser;
+package com.github.svyaz.airlinersbot.adapter.htmlselector;
 
+import com.github.svyaz.airlinersbot.app.domain.Picture;
 import com.github.svyaz.airlinersbot.adapter.exeption.ParseException;
-import com.github.svyaz.airlinersdailybot.mapper.PictureIdGetter;
-import com.github.svyaz.airlinersdailybot.model.PictureData;
-import com.github.svyaz.airlinersdailybot.model.PictureEntity;
-import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -12,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 @Component
-@RequiredArgsConstructor
-public class HtmlParserBean implements HtmlParser {
+public class HtmlSelectorBean implements HtmlSelector {
 
     private static final String TOP_PHOTO_LINK_SELECTOR = "div.hp-t5-row-photo a";
 
@@ -33,10 +30,8 @@ public class HtmlParserBean implements HtmlParser {
     private static final String AUTHOR_COUNTRY_SELECTOR = "div.pib-section-photographer span.ua-country";
     private static final String PHOTO_FILE_URI_SELECTOR = "div.pdp-image-wrapper img";
 
-    private final PictureIdGetter idGetter;
-
     @Override
-    public String getLargePicturePageUri(String html) {
+    public String getTopPicturePageUri(String html) {
         return Optional.ofNullable(Jsoup.parse(html)
                         .select(TOP_PHOTO_LINK_SELECTOR)
                         .first())
@@ -45,20 +40,16 @@ public class HtmlParserBean implements HtmlParser {
     }
 
     @Override
-    public String getFirstSearchResultUri(String html) {
-        return Optional.ofNullable(Jsoup.parse(html)
-                        .select(SEARCH_FIRST_PHOTO_LINK_SELECTOR)
-                        .first())
-                .map(e -> e.attr("href"))
-                .orElseThrow(() -> new ParseException("Pictures by keywords not found"));
-    }
-
-    @Override
-    public PictureEntity getPictureEntity(String html) {
+    public Picture getTopPicture(String html) {
         var document = Jsoup.parse(html);
 
-        var pictureData = PictureData.builder()
-                .photoPageUri(selectFromAttribute(document, PHOTO_PAGE_URI_SELECTOR, "content"))
+        var photoPageUri = selectFromAttribute(document, PHOTO_PAGE_URI_SELECTOR, "content");
+
+        return Picture.builder()
+                .id(getPictureId(photoPageUri))
+                .photoFileUri(selectFromAttribute(document, PHOTO_FILE_URI_SELECTOR, "src"))
+                .nextPageUri(selectFromAttribute(document, SEARCH_NEXT_PAGE_URI_SELECTOR, "href"))
+                .photoPageUri(photoPageUri)
                 .airline(selectFromElementValue(document, AIRLINE_SELECTOR))
                 .aircraft(selectFromElementValue(document, AIRCRAFT_SELECTOR))
                 .registration(selectFromElementValue(document, REGISTRATION_SELECTOR))
@@ -67,13 +58,6 @@ public class HtmlParserBean implements HtmlParser {
                 .content(selectFromElementValue(document, CONTENT_SELECTOR))
                 .author(selectFromElementValue(document, AUTHOR_SELECTOR))
                 .authorCountry(selectFromElementValue(document, AUTHOR_COUNTRY_SELECTOR))
-                .build();
-
-        return PictureEntity.builder()
-                .id(idGetter.getId(pictureData.getPhotoPageUri()))
-                .photoFileUri(selectFromAttribute(document, PHOTO_FILE_URI_SELECTOR, "src"))
-                .nextPageUri(selectFromAttribute(document, SEARCH_NEXT_PAGE_URI_SELECTOR, "href"))
-                .pictureData(pictureData)
                 .build();
     }
 
@@ -91,4 +75,14 @@ public class HtmlParserBean implements HtmlParser {
                 .filter(Predicate.not(String::isEmpty))
                 .orElse(null);
     }
+
+    private Long getPictureId(String raw) {
+        var pattern = Pattern.compile("\\d+$");
+        var matcher = pattern.matcher(raw);
+
+        return matcher.find() ?
+                Long.parseLong(matcher.group(0)) :
+                null;
+    }
+
 }

@@ -2,7 +2,7 @@ package com.github.svyaz.airlinersbot.app.service.handler;
 
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
-import com.github.svyaz.airlinersbot.app.service.UserService;
+import com.github.svyaz.airlinersbot.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

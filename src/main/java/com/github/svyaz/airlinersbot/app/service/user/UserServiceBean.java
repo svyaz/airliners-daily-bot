@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersbot.app.service;
+package com.github.svyaz.airlinersbot.app.service.user;
 
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.datastore.service.UserStorageService;
@@ -15,7 +15,7 @@ public class UserServiceBean implements UserService {
 
     @Override
     public User apply(User user) {
-        var updatedUser = userStorageService.findUser(user.getId())
+        var updatedUser = userStorageService.find(user.getId())
                 .orElseGet(() ->
                         User.builder()
                                 .id(user.getId())

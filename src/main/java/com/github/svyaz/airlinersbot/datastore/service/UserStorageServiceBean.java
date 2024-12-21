@@ -13,10 +13,11 @@ import java.util.Optional;
 public class UserStorageServiceBean implements UserStorageService {
 
     private final UserRepository repository;
+
     private final UserMapper mapper;
 
     @Override
-    public Optional<User> findUser(Long id) {
+    public Optional<User> find(Long id) {
         return repository.findById(id)
                 .map(mapper::toUser);
     }
