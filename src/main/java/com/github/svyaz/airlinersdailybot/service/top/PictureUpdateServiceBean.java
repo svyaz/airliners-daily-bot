@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PictureUpdateServiceBean implements PictureUpdateService {
 
-    private final PictureHolderService holderService;
-    private final AirlinersClient airlinersClient;
-    private final PictureIdGetter pictureIdGetter;
+//    private final PictureHolderService holderService;
+//    private final AirlinersClient airlinersClient;
+//    private final PictureIdGetter pictureIdGetter;
 
-    @LogAround
+    //@LogAround
     @Override
-    @Scheduled(initialDelay = 1_000, fixedDelay = 600_000)
+//    @Scheduled(initialDelay = 1_000, fixedDelay = 600_000)
     public void updatePictureIfNeed() {
-        var topPhotoPageUri = airlinersClient.getTopPhotoUri();
+        /*var topPhotoPageUri = airlinersClient.getTopPhotoUri();
         var pictureId = pictureIdGetter.getId(topPhotoPageUri);
 
         if (holderService.hasChanged(pictureId)) {
@@ -29,7 +29,7 @@ public class PictureUpdateServiceBean implements PictureUpdateService {
             holderService.setEntity(
                     airlinersClient.getPictureEntity(topPhotoPageUri)
             );
-        }
+        }*/
     }
 
 }

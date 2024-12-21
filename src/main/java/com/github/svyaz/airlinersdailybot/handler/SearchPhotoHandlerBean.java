@@ -1,7 +1,7 @@
 package com.github.svyaz.airlinersdailybot.handler;
 
 import com.github.svyaz.airlinersdailybot.conf.Constants;
-import com.github.svyaz.airlinersdailybot.errors.ParseException;
+import com.github.svyaz.airlinersbot.adapter.exeption.ParseException;
 import com.github.svyaz.airlinersdailybot.service.client.AirlinersClient;
 import com.github.svyaz.airlinersdailybot.service.usercache.UserCacheHolder;
 import lombok.RequiredArgsConstructor;
