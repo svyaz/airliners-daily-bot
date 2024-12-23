@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -58,6 +59,7 @@ public class HtmlSelectorBean implements HtmlSelector {
                 .content(selectFromElementValue(document, CONTENT_SELECTOR))
                 .author(selectFromElementValue(document, AUTHOR_SELECTOR))
                 .authorCountry(selectFromElementValue(document, AUTHOR_COUNTRY_SELECTOR))
+                .updateTime(LocalDateTime.now())
                 .build();
     }
 

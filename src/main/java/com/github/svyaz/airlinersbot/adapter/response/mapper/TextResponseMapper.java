@@ -3,7 +3,6 @@ package com.github.svyaz.airlinersbot.adapter.response.mapper;
 import com.github.svyaz.airlinersbot.adapter.response.dto.TextResponseDto;
 import com.github.svyaz.airlinersbot.adapter.response.mapper.keyboard.KeyboardMapper;
 import com.github.svyaz.airlinersbot.adapter.response.sendstrategy.SendTextStrategy;
-import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import com.github.svyaz.airlinersbot.conf.properties.Constants;
 import org.springframework.stereotype.Component;
@@ -22,8 +21,7 @@ public class TextResponseMapper extends AbstractResponseMapper<TextResponse, Tex
     }
 
     @Override
-    public TextResponseDto map(Response response) {
-
+    public TextResponseDto map(TextResponse response) {
         return new TextResponseDto(
                 SendMessage.builder()
                         .parseMode(Constants.PARSE_MODE)

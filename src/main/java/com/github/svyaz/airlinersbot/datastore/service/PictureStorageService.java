@@ -9,4 +9,6 @@ public interface PictureStorageService {
     Optional<Picture> find(Long id);
 
     Picture save(Picture picture);
+
+    Optional<Picture> getTop();
 }

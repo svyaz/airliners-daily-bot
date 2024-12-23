@@ -3,6 +3,8 @@ package com.github.svyaz.airlinersbot.app.domain.response;
 import com.github.svyaz.airlinersbot.app.domain.Picture;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -11,8 +13,8 @@ public class PictureResponse extends Response {
 
     private Picture picture;
 
-    public PictureResponse(Long chatId, String text, Picture picture) {
-        super(chatId, text, null);
+    public PictureResponse(Long chatId, Picture picture, String text, List<List<InlineButton>> inlineButtons) {
+        super(chatId, text, inlineButtons);
         this.picture = picture;
     }
 }

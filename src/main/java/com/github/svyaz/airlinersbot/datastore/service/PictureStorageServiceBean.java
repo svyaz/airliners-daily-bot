@@ -31,4 +31,10 @@ public class PictureStorageServiceBean implements PictureStorageService {
                 .orElse(null);
     }
 
+    @Override
+    public Optional<Picture> getTop() {
+        return repository.findTopByOrderByUpdateTimeDesc()
+                .map(mapper::toPicture);
+    }
+
 }

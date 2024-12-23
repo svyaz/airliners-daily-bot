@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -22,12 +24,7 @@ public class TopPictureUpdateServiceBean implements TopPictureUpdateService {
             fixedDelayString = "${app.picture.update.fixedDelay}"
     )
     public void update() {
-        var picture = airlinersClient.getTopPicture();
-
-        pictureStorageService.find(picture.getId())
-                .ifPresentOrElse(
-                        p -> log.debug("update -> already existed picture id [{}]", p.getId()),
-                        () -> pictureStorageService.save(picture)
-                );
+        Optional.ofNullable(airlinersClient.getTopPicture())
+                .ifPresent(pictureStorageService::save);
     }
 }
