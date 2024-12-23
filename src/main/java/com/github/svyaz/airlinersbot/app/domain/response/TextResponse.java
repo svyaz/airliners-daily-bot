@@ -11,6 +11,6 @@ import java.util.List;
 public class TextResponse extends Response {
 
     public TextResponse(Long chatId, String text, List<List<InlineButton>> inlineButtons) {
-        super(chatId, text, inlineButtons);
+        super(ResponseType.TEXT, chatId, text, inlineButtons);
     }
 }

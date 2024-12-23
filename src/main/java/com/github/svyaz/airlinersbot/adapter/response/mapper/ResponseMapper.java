@@ -2,10 +2,13 @@ package com.github.svyaz.airlinersbot.adapter.response.mapper;
 
 import com.github.svyaz.airlinersbot.adapter.response.dto.ResponseDto;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
+import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 
-public interface ResponseMapper<T extends Response, R extends ResponseDto<?>> {
+import java.util.function.Function;
 
-    Class<T> myType();
+public interface ResponseMapper<T extends Response, R extends ResponseDto<?>> extends Function<T, R> {
 
-    R map(T response);
+    default ResponseType myType() {
+        return ResponseType.TEXT;
+    }
 }

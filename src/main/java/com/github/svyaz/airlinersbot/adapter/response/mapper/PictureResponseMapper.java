@@ -4,6 +4,7 @@ import com.github.svyaz.airlinersbot.adapter.response.dto.PictureResponseDto;
 import com.github.svyaz.airlinersbot.adapter.response.mapper.keyboard.KeyboardMapper;
 import com.github.svyaz.airlinersbot.adapter.response.sendstrategy.SendPhotoStrategy;
 import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
+import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 import com.github.svyaz.airlinersbot.conf.properties.Constants;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -17,12 +18,12 @@ public class PictureResponseMapper extends AbstractResponseMapper<PictureRespons
     }
 
     @Override
-    public Class<PictureResponse> myType() {
-        return PictureResponse.class;
+    public ResponseType myType() {
+        return ResponseType.PHOTO;
     }
 
     @Override
-    public PictureResponseDto map(PictureResponse response) {
+    public PictureResponseDto apply(PictureResponse response) {
         return new PictureResponseDto(
                 SendPhoto.builder()
                         .parseMode(Constants.PARSE_MODE)

@@ -14,7 +14,7 @@ public class PictureResponse extends Response {
     private Picture picture;
 
     public PictureResponse(Long chatId, Picture picture, String text, List<List<InlineButton>> inlineButtons) {
-        super(chatId, text, inlineButtons);
+        super(ResponseType.PHOTO, chatId, text, inlineButtons);
         this.picture = picture;
     }
 }
