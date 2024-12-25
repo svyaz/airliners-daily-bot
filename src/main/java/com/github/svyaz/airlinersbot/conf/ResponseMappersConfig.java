@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public class ResponseMappersConfig {
 
     @Bean
-    public Map<ResponseType, ResponseMapper<? extends Response, ? extends ResponseDto<?>>> responseMappers(
-            Set<ResponseMapper<? extends Response, ? extends ResponseDto<?>>> mappers) {
+    public Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers(
+            Set<ResponseMapper<? extends ResponseDto<?>>> mappers) {
 
         return mappers.stream()
                 .collect(Collectors.toMap(ResponseMapper::myType, Function.identity()));

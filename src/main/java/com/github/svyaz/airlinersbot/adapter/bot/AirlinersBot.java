@@ -34,13 +34,13 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
     private final LocaleResolver localeResolver;
     private final RequestResolver requestResolver;
     private final Map<RequestType, RequestHandler<? extends Response>> requestHandlers;
-    private final Map<ResponseType, ResponseMapper<? extends Response, ? extends ResponseDto<?>>> responseMappers;
+    private final Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers;
 
     public AirlinersBot(BotProperties botProperties,
                         LocaleResolver localeResolver,
                         RequestResolver requestResolver,
                         Map<RequestType, RequestHandler<? extends Response>> requestHandlers,
-                        Map<ResponseType, ResponseMapper<? extends Response, ? extends ResponseDto<?>>> responseMappers) {
+                        Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers) {
         super(botProperties.getToken());
         this.botName = botProperties.getName();
         this.localeResolver = localeResolver;
@@ -72,7 +72,8 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
                 .flatMap(request -> Optional.ofNullable(requestHandlers.get(request.type()))
                         .map(handler -> handleRequest(handler, request)))
                 .flatMap(response -> Optional.ofNullable(responseMappers.get(response.getType()))
-                        .map(mapper -> mapResponse(mapper, response)))
+                        .map(mapper -> mapper.apply(response)))
+                //.isPresent();
                 .ifPresent(this::sendSafe);
         // log.debug("onUpdateReceived -> message [{}]", message);
     }
@@ -86,14 +87,14 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
         }
     }
 
-    private <R extends Response, D extends ResponseDto<?>> D mapResponse(ResponseMapper<R, D> mapper, R response) {
+    /*private ResponseDto<?> mapResponse(ResponseMapper<? extends ResponseDto<?>> mapper, Response response) {
         try {
             return mapper.apply(response);
         } catch (Exception e) {
             log.error("Error mapping response: {}", response, e);
             throw new RuntimeException("Response mapping failed", e);
         }
-    }
+    }*/
 
     private Message sendSafe(ResponseDto<?> dto) {
         try {

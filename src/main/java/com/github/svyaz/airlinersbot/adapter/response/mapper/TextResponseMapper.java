@@ -1,8 +1,10 @@
 package com.github.svyaz.airlinersbot.adapter.response.mapper;
 
+import com.github.svyaz.airlinersbot.adapter.response.dto.ResponseDto;
 import com.github.svyaz.airlinersbot.adapter.response.dto.TextResponseDto;
 import com.github.svyaz.airlinersbot.adapter.response.mapper.keyboard.KeyboardMapper;
 import com.github.svyaz.airlinersbot.adapter.response.sendstrategy.SendTextStrategy;
+import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import com.github.svyaz.airlinersbot.conf.properties.Constants;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
-public class TextResponseMapper extends AbstractResponseMapper<TextResponse, TextResponseDto> {
+public class TextResponseMapper extends AbstractResponseMapper<TextResponseDto> {
 
     public TextResponseMapper(KeyboardMapper keyboardMapper) {
         super(keyboardMapper);
@@ -22,7 +24,7 @@ public class TextResponseMapper extends AbstractResponseMapper<TextResponse, Tex
     }
 
     @Override
-    public TextResponseDto apply(TextResponse response) {
+    public TextResponseDto apply(Response response) {
         return new TextResponseDto(
                 SendMessage.builder()
                         .parseMode(Constants.PARSE_MODE)

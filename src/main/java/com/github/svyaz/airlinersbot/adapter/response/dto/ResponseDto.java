@@ -3,14 +3,13 @@ package com.github.svyaz.airlinersbot.adapter.response.dto;
 import com.github.svyaz.airlinersbot.adapter.response.sendstrategy.SendStrategy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Data
 @AllArgsConstructor
-public abstract class ResponseDto<T extends PartialBotApiMethod<?>> {
+public abstract class ResponseDto<T> {
 
     protected T telegramMessage;
 

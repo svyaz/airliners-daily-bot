@@ -6,9 +6,7 @@ import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 
 import java.util.function.Function;
 
-public interface ResponseMapper<T extends Response, R extends ResponseDto<?>> extends Function<T, R> {
+public interface ResponseMapper<R extends ResponseDto<?>> extends Function<Response, R> {
 
-    default ResponseType myType() {
-        return ResponseType.TEXT;
-    }
+    ResponseType myType();
 }
