@@ -6,5 +6,7 @@ public interface HtmlSelector {
 
     String getTopPicturePageUri(String html);
 
-    Picture getTopPicture(String html);
+    Picture getPicture(String html);
+
+    String getFirstSearchResultUri(String html);
 }

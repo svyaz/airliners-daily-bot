@@ -1,5 +1,6 @@
 package com.github.svyaz.airlinersbot.adapter.htmlselector;
 
+import com.github.svyaz.airlinersbot.adapter.exeption.PictureNotFoundException;
 import com.github.svyaz.airlinersbot.app.domain.Picture;
 import com.github.svyaz.airlinersbot.adapter.exeption.ParseException;
 import org.jsoup.Jsoup;
@@ -41,7 +42,7 @@ public class HtmlSelectorBean implements HtmlSelector {
     }
 
     @Override
-    public Picture getTopPicture(String html) {
+    public Picture getPicture(String html) {
         var document = Jsoup.parse(html);
 
         var photoPageUri = selectFromAttribute(document, PHOTO_PAGE_URI_SELECTOR, "content");
@@ -61,6 +62,15 @@ public class HtmlSelectorBean implements HtmlSelector {
                 .authorCountry(selectFromElementValue(document, AUTHOR_COUNTRY_SELECTOR))
                 .updateTime(LocalDateTime.now())
                 .build();
+    }
+
+    @Override
+    public String getFirstSearchResultUri(String html) {
+        return Optional.ofNullable(Jsoup.parse(html)
+                        .select(SEARCH_FIRST_PHOTO_LINK_SELECTOR)
+                        .first())
+                .map(e -> e.attr("href"))
+                .orElseThrow(() -> new PictureNotFoundException("Pictures by keywords not found"));
     }
 
     private String selectFromElementValue(Document document, String query) {

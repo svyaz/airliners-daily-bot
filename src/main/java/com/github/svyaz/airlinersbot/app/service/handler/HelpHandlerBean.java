@@ -27,10 +27,7 @@ public class HelpHandlerBean extends AbstractRequestHandler<TextResponse> {
                 getLocalizedMessage("help.text"),
                 List.of(
                         List.of(
-                                new InlineButton(
-                                        SHOW_TOP_CB_DATA,
-                                        getLocalizedMessage("button.show-top")
-                                )
+                                getTopButton()
                         )
                 ));
     }

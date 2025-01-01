@@ -31,7 +31,6 @@ public class PictureResponseMapper extends AbstractResponseMapper<PictureRespons
                 SendPhoto.builder()
                         .parseMode(Constants.PARSE_MODE)
                         .chatId(response.getChatId())
-                        //.photo(new InputFile(response.getPicture().getPhotoFileUri()))
                         .photo(new InputFile(pictureResponse.getPicture().getPhotoFileUri()))
                         .caption(response.getText())
                         .replyMarkup(keyboardMapper.apply(response.getInlineButtons()))

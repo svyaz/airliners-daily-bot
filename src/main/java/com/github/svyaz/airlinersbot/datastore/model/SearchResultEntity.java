@@ -1,0 +1,31 @@
+package com.github.svyaz.airlinersbot.datastore.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "search_result")
+public class SearchResultEntity {
+
+    @Id
+    private Long userId;
+
+    private String keywords;
+
+    private String pictureUri;
+
+    private String nextPictureUri;
+
+    private LocalDateTime updateTime;
+}
