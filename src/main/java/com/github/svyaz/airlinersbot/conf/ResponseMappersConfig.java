@@ -2,7 +2,6 @@ package com.github.svyaz.airlinersbot.conf;
 
 import com.github.svyaz.airlinersbot.adapter.response.dto.ResponseDto;
 import com.github.svyaz.airlinersbot.adapter.response.mapper.ResponseMapper;
-import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

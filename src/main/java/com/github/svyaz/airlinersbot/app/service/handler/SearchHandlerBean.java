@@ -28,21 +28,19 @@ public class SearchHandlerBean extends AbstractRequestHandler<PictureResponse> {
         var updatedUser = updateUser(request.user());
 
         var picture = searchPictureService.search(updatedUser, request.message().getText());
-        //todo  - обработать исключение когда ничего не найдено - должно отправиться
-        // текстовое сообщение пользователю.
 
         var buttonsRow = new ArrayList<InlineButton>();
         buttonsRow.add(getTopButton());
 
         Optional.ofNullable(picture.getNextPageUri())
                 .ifPresent(uri -> buttonsRow.add(
-                        new InlineButton(SHOW_NEXT_CB_DATA, getLocalizedMessage("button.search-next"))
+                        new InlineButton(SHOW_NEXT_CB_DATA, messageService.getLocalizedMessage("button.search-next"))
                 ));
 
         return new PictureResponse(
                 updatedUser.getId(),
                 picture,
-                getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
+                messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
                 List.of(buttonsRow)
         );
     }

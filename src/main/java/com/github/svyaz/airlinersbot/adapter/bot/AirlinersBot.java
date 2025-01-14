@@ -1,8 +1,11 @@
 package com.github.svyaz.airlinersbot.adapter.bot;
 
+import com.github.svyaz.airlinersbot.app.exception.CommonBotException;
+import com.github.svyaz.airlinersbot.app.service.handler.ExceptionsHandler;
 import com.github.svyaz.airlinersbot.adapter.response.dto.ResponseDto;
 import com.github.svyaz.airlinersbot.adapter.response.mapper.ResponseMapper;
 import com.github.svyaz.airlinersbot.adapter.request.resolver.RequestResolver;
+import com.github.svyaz.airlinersbot.app.domain.request.Request;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
@@ -31,18 +34,21 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
     private final RequestResolver requestResolver;
     private final Map<RequestType, RequestHandler<? extends Response>> requestHandlers;
     private final Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers;
+    private final ExceptionsHandler exceptionsHandler;
 
     public AirlinersBot(BotProperties botProperties,
                         LocaleResolver localeResolver,
                         RequestResolver requestResolver,
                         Map<RequestType, RequestHandler<? extends Response>> requestHandlers,
-                        Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers) {
+                        Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers,
+                        ExceptionsHandler exceptionsHandler) {
         super(botProperties.getToken());
         this.botName = botProperties.getName();
         this.localeResolver = localeResolver;
         this.requestResolver = requestResolver;
         this.requestHandlers = requestHandlers;
         this.responseMappers = responseMappers;
+        this.exceptionsHandler = exceptionsHandler;
 
         log.info("handlers: {}", requestHandlers);
         log.info("mappers: {}", responseMappers);
@@ -61,15 +67,30 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
 
     @Override
     public void onUpdateReceived(Update update) {
+        log.info("onUpdateReceived <- {}", update);
+
         localeResolver.setLocale(update);
 
         Optional.of(update)
                 .map(requestResolver)
                 .flatMap(request -> Optional.ofNullable(requestHandlers.get(request.type()))
-                        .map(handler -> handler.handle(request)))
+                        .map(handler -> handleRequest(handler, request)))
                 .flatMap(response -> Optional.ofNullable(responseMappers.get(response.getType()))
                         .map(mapper -> mapper.apply(response)))
                 .ifPresent(this::sendSafe);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <R extends Response> R handleRequest(RequestHandler<R> handler, Request request) {
+        try {
+            return handler.handle(request);
+        } catch (CommonBotException e) {
+            log.error("Error handling request: {}", request, e);
+            return (R) exceptionsHandler.handle(e, request);
+        } catch (Exception e) {
+            log.error("Error handling request: {}", request, e);
+            throw new RuntimeException("Request handling failed", e);
+        }
     }
 
     private Message sendSafe(ResponseDto<?> dto) {

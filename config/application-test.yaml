@@ -42,3 +42,5 @@ logging:
     com.github.svyaz: debug
     org.telegram: trace
 #    org.springframework.web: trace
+
+#todo it's me: 124419558

@@ -23,8 +23,8 @@ public class StartHandlerBean extends AbstractRequestHandler<TextResponse> {
         return new TextResponse(
                 updatedUser.getId(),
                 Optional.ofNullable(updatedUser.getFirstName())
-                        .map(name -> getLocalizedMessage("start.text-with-name", name))
-                        .orElseGet(() -> getLocalizedMessage("start.text")),
+                        .map(name -> messageService.getLocalizedMessage("start.text-with-name", name))
+                        .orElseGet(() -> messageService.getLocalizedMessage("start.text")),
                 List.of(
                         List.of(
                                 getTopButton()

@@ -1,6 +1,6 @@
 package com.github.svyaz.airlinersbot.adapter.htmlselector;
 
-import com.github.svyaz.airlinersbot.adapter.exeption.PictureNotFoundException;
+import com.github.svyaz.airlinersbot.app.exception.PictureNotFoundException;
 import com.github.svyaz.airlinersbot.app.domain.Picture;
 import com.github.svyaz.airlinersbot.adapter.exeption.ParseException;
 import org.jsoup.Jsoup;

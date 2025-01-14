@@ -25,15 +25,15 @@ public class PictureResponseMapper extends AbstractResponseMapper<PictureRespons
 
     @Override
     public PictureResponseDto apply(Response response) {
-        var pictureResponse = (PictureResponse) response;
+        var resp = (PictureResponse) response;
 
         return new PictureResponseDto(
                 SendPhoto.builder()
                         .parseMode(Constants.PARSE_MODE)
-                        .chatId(response.getChatId())
-                        .photo(new InputFile(pictureResponse.getPicture().getPhotoFileUri()))
-                        .caption(response.getText())
-                        .replyMarkup(keyboardMapper.apply(response.getInlineButtons()))
+                        .chatId(resp.getChatId())
+                        .photo(new InputFile(resp.getPicture().getPhotoFileUri()))
+                        .caption(resp.getText())
+                        .replyMarkup(keyboardMapper.apply(resp.getInlineButtons()))
                         .build(),
                 new SendPhotoStrategy()
         );
