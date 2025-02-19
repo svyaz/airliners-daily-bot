@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.Optional;
-
+@Deprecated
 @Service(UpdateHandler.START_COMMAND_HANDLER)
 public class StartHandlerBean extends AbstractUpdateHandler {
 

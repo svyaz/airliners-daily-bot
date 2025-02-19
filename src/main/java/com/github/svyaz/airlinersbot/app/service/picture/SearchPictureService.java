@@ -6,4 +6,6 @@ import com.github.svyaz.airlinersbot.app.domain.User;
 public interface SearchPictureService {
 
     Picture search(User user, String keywords);
+
+    Picture next(User user);
 }

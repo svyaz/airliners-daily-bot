@@ -30,6 +30,7 @@ public class HandlerAspect {
         try {
             return joinPoint.proceed();
         } catch (CommonBotException ex) {
+            log.warn("proceedHandler -> {}", ex.getMessage());
             var request = (Request) joinPoint.getArgs()[0];
             return new TextResponse(
                     request.user().getId(),

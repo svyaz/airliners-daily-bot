@@ -7,4 +7,6 @@ public interface AirlinersClient {
     Picture getTopPicture();
 
     Picture search(String keywords);
+
+    Picture getPictureByUri(String uri);
 }

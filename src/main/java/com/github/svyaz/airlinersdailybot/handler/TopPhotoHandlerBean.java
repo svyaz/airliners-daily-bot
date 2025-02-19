@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.Comparator;
-
+@Deprecated
 @RequiredArgsConstructor
 @Service(UpdateHandler.TOP_PHOTO_HANDLER)
 public class TopPhotoHandlerBean extends AbstractUpdateHandler {

@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.Objects;
-
+@Deprecated
 @Slf4j
 @RequiredArgsConstructor
 @Service(UpdateHandler.SEARCH_NEXT_PHOTO_HANDLER)

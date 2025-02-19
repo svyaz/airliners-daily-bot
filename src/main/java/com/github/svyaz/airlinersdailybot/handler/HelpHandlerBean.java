@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+@Deprecated
 @Service(UpdateHandler.HELP_COMMAND_HANDLER)
 public class HelpHandlerBean extends AbstractUpdateHandler {
 

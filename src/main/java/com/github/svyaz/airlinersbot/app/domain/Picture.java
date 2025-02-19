@@ -27,6 +27,11 @@ public class Picture {
     private String authorCountry;
     private LocalDateTime updateTime;
 
+    public Picture(String photoFileUri, String nextPageUri) {
+        this.photoFileUri = photoFileUri;
+        this.nextPageUri = nextPageUri;
+    }
+
     public Object[] getCaptionArgs() {
         return new Object[]{
                 // title with link

@@ -47,6 +47,13 @@ public class AirlinersClientBean implements AirlinersClient {
                 .block();
     }
 
+    @Override
+    public Picture getPictureByUri(String uri) {
+        return getQuery(uri)
+                .map(htmlSelector::getPicture)
+                .block();
+    }
+
     private Mono<String> getQuery(String uri) {
         return webClient.get()
                 .uri(uri)

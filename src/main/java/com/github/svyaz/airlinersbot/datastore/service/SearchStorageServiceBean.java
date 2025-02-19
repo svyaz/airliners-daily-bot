@@ -1,6 +1,7 @@
 package com.github.svyaz.airlinersbot.datastore.service;
 
 import com.github.svyaz.airlinersbot.app.domain.SearchResult;
+import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.datastore.mapper.SearchResultMapper;
 import com.github.svyaz.airlinersbot.datastore.repository.SearchResultRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,11 @@ public class SearchStorageServiceBean implements SearchStorageService {
                 .map(repository::save)
                 .map(mapper::toSearchResult)
                 .orElse(null);
+    }
+
+    @Override
+    public Optional<SearchResult> getSearchResult(User user) {
+        return repository.findById(user.getId())
+                .map(mapper::toSearchResult);
     }
 }
