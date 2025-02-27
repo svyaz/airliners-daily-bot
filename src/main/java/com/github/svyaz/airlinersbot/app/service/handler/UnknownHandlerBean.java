@@ -1,12 +1,12 @@
 package com.github.svyaz.airlinersbot.app.service.handler;
 
-import com.github.svyaz.airlinersbot.app.domain.request.Request;
+import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UnknownHandlerBean extends AbstractRequestHandler<TextResponse> {
@@ -17,18 +17,15 @@ public class UnknownHandlerBean extends AbstractRequestHandler<TextResponse> {
     }
 
     @Override
-    public TextResponse handle(Request request) {
-        return Optional.ofNullable(request.user())
-                .map(this::updateUser)
-                .map(u -> new TextResponse(
-                        u.getId(),
-                        messageService.getLocalizedMessage("err.unknown-command"),
+    TextResponse getResponse(User user, Message message) {
+        return new TextResponse(
+                user.getId(),
+                messageService.getLocalizedMessage("err.unknown-command"),
+                List.of(
                         List.of(
-                                List.of(
-                                        getTopButton()
-                                )
+                                getTopButton()
                         )
-                ))
-                .orElseThrow(() -> new RuntimeException("User not defined"));
+                )
+        );
     }
 }

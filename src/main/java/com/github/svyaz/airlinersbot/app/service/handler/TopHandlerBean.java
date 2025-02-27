@@ -1,11 +1,12 @@
 package com.github.svyaz.airlinersbot.app.service.handler;
 
-import com.github.svyaz.airlinersbot.app.domain.request.Request;
+import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.service.picture.TopPictureRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 
@@ -21,13 +22,11 @@ public class TopHandlerBean extends AbstractRequestHandler<PictureResponse> {
     }
 
     @Override
-    public PictureResponse handle(Request request) {
-        var updatedUser = updateUser(request.user());
-
+    PictureResponse getResponse(User user, Message message) {
         var picture = topPictureRequestService.get();
 
         return new PictureResponse(
-                updatedUser.getId(),
+                user.getId(),
                 picture,
                 messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
                 List.of(

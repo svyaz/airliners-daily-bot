@@ -1,12 +1,13 @@
 package com.github.svyaz.airlinersbot.app.service.handler;
 
-import com.github.svyaz.airlinersbot.app.domain.request.Request;
+import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.InlineButton;
 import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.service.picture.SearchPictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +27,8 @@ public class SearchNextHandlerBean extends AbstractRequestHandler<PictureRespons
     }
 
     @Override
-    public PictureResponse handle(Request request) {
-        var updatedUser = updateUser(request.user());
-
-        var picture = searchPictureService.next(updatedUser);
+    PictureResponse getResponse(User user, Message message) {
+        var picture = searchPictureService.next(user);
 
         var buttonsRow = new ArrayList<InlineButton>();
         buttonsRow.add(getTopButton());
@@ -40,7 +39,7 @@ public class SearchNextHandlerBean extends AbstractRequestHandler<PictureRespons
                 ));
 
         return new PictureResponse(
-                updatedUser.getId(),
+                user.getId(),
                 picture,
                 messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
                 List.of(buttonsRow)
