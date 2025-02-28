@@ -8,9 +8,9 @@ import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
 import com.github.svyaz.airlinersbot.conf.properties.BotProperties;
-import com.github.svyaz.airlinersbot.adapter.locale.LocaleResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -19,33 +19,30 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
 public class AirlinersBot extends TelegramLongPollingBot implements InitializingBean {
 
+    private final Set<Long> inProgress;
     private final String botName;
-    private final LocaleResolver localeResolver;
     private final RequestResolver requestResolver;
     private final Map<RequestType, RequestHandler<? extends Response>> requestHandlers;
     private final Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers;
 
     public AirlinersBot(BotProperties botProperties,
-                        LocaleResolver localeResolver,
                         RequestResolver requestResolver,
                         Map<RequestType, RequestHandler<? extends Response>> requestHandlers,
                         Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers) {
         super(botProperties.getToken());
         this.botName = botProperties.getName();
-        this.localeResolver = localeResolver;
         this.requestResolver = requestResolver;
         this.requestHandlers = requestHandlers;
         this.responseMappers = responseMappers;
 
-        //log.info("handlers: {}", requestHandlers);
-        //log.info("mappers: {}", responseMappers);
+        this.inProgress = Collections.synchronizedSet(new HashSet<>());
     }
 
     @Override
@@ -63,15 +60,31 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
     public void onUpdateReceived(Update update) {
         log.info("onUpdateReceived <- {}", update);
 
-        localeResolver.setLocale(update);
+        var request = requestResolver.apply(update);
 
-        Optional.of(update)
-                .map(requestResolver)
-                .flatMap(request -> Optional.ofNullable(requestHandlers.get(request.type()))
-                        .map(handler -> handler.handle(request)))
-                .flatMap(response -> Optional.ofNullable(responseMappers.get(response.getType()))
-                        .map(mapper -> mapper.apply(response)))
-                .ifPresent(this::sendSafe);
+        if (inProgress.contains(request.user().getId())) {
+            return;
+        }
+
+        inProgress.add(request.user().getId());
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                LocaleContextHolder.setLocale(Locale.of(request.user().getLanguageCode()));
+
+                Optional.of(request)
+                        .flatMap(req -> Optional.ofNullable(requestHandlers.get(req.type()))
+                                .map(handler -> handler.handle(req)))
+                        .flatMap(resp -> Optional.ofNullable(responseMappers.get(resp.getType()))
+                                .map(mapper -> mapper.apply(resp)))
+                        .ifPresent(this::sendSafe);
+            } catch (Exception ex) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Error while handling request", ex);
+            } finally {
+                inProgress.remove(request.user().getId());
+            }
+        });
     }
 
     private Message sendSafe(ResponseDto<?> dto) {
