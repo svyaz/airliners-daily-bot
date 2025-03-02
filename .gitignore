@@ -17,3 +17,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### H2 tmp DB
+test.mv.db
+test.trace.db
+
