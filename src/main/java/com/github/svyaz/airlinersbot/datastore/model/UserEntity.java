@@ -1,8 +1,6 @@
 package com.github.svyaz.airlinersbot.datastore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +24,7 @@ public class UserEntity {
     private String languageCode;
     private LocalDateTime registerTime;
     private LocalDateTime lastVisitTime;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private SearchResultEntity searchResultEntity;
 }

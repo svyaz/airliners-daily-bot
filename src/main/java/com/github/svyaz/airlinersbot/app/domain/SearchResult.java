@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class SearchResult {
 
     private Long userId;
-
     private String keywords;
-
     private Picture picture;
 }

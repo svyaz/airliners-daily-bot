@@ -5,7 +5,7 @@ import com.github.svyaz.airlinersbot.app.domain.Picture;
 import com.github.svyaz.airlinersbot.app.domain.SearchResult;
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.exception.PictureNotFoundException;
-import com.github.svyaz.airlinersbot.datastore.service.SearchStorageService;
+import com.github.svyaz.airlinersbot.datastore.service.UserStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,26 +17,26 @@ public class SearchPictureServiceBean implements SearchPictureService {
 
     private final AirlinersClient airlinersClient;
 
-    private final SearchStorageService searchStorageService;
+    private final UserStorageService userStorageService;
 
     @Override
     public Picture search(User user, String keywords) {
         var picture = airlinersClient.search(keywords);
 
-        var searchResult = SearchResult.builder()
+        user.setSearchResult(SearchResult.builder()
                 .userId(user.getId())
                 .keywords(keywords)
                 .picture(picture)
-                .build();
+                .build());
 
-        searchStorageService.save(searchResult);
+        userStorageService.save(user);
 
         return picture;
     }
 
     @Override
     public Picture next(User user) {
-        var searchResult = searchStorageService.getSearchResult(user)
+        var searchResult = Optional.ofNullable(user.getSearchResult())
                 .orElseThrow(() -> new PictureNotFoundException("No search results for this user"));
 
         var nextPageUri = Optional.ofNullable(searchResult.getPicture())
@@ -45,8 +45,8 @@ public class SearchPictureServiceBean implements SearchPictureService {
 
         var picture = airlinersClient.getPictureByUri(nextPageUri);
 
-        searchResult.setPicture(picture);
-        searchStorageService.save(searchResult);
+        user.getSearchResult().setPicture(picture);
+        userStorageService.save(user);
 
         return picture;
     }

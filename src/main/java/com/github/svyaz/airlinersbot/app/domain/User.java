@@ -19,4 +19,5 @@ public class User {
     private String lastName;
     private String languageCode;
     private LocalDateTime registerTime;
+    private SearchResult searchResult;
 }

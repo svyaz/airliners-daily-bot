@@ -1,8 +1,6 @@
 package com.github.svyaz.airlinersbot.datastore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,12 +18,13 @@ public class SearchResultEntity {
 
     @Id
     private Long userId;
-
     private String keywords;
-
     private String pictureUri;
-
     private String nextPictureUri;
-
     private LocalDateTime updateTime;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }
