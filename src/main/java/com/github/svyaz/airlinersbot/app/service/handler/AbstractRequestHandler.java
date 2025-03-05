@@ -7,10 +7,12 @@ import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.service.message.MessageService;
 import com.github.svyaz.airlinersbot.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import static com.github.svyaz.airlinersbot.conf.properties.Constants.SHOW_TOP_CB_DATA;
 
+@Transactional
 abstract class AbstractRequestHandler<R extends Response> implements RequestHandler<R> {
 
     @Autowired

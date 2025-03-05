@@ -89,6 +89,7 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
 
     private Message sendSafe(ResponseDto<?> dto) {
         try {
+            log.debug("sendSafe <- {}", dto);
             return dto.send(this);
         } catch (TelegramApiException e) {
             log.error("Error sending message: {}", dto, e);
