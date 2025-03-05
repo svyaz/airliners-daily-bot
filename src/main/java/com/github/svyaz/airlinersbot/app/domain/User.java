@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.EnumMap;
 
 @Data
 @Builder
@@ -20,4 +21,5 @@ public class User {
     private String languageCode;
     private LocalDateTime registerTime;
     private SearchResult searchResult;
+    private EnumMap<SubscriptionType, Subscription> subscriptions;
 }

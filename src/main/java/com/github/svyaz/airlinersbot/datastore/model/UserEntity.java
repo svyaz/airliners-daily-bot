@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -26,5 +27,8 @@ public class UserEntity {
     private LocalDateTime lastVisitTime;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private SearchResultEntity searchResultEntity;
+    private SearchResultEntity searchResult;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<SubscriptionEntity> subscriptions;
 }
