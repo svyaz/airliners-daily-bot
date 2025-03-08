@@ -19,7 +19,7 @@ public class UnknownHandlerBean extends AbstractRequestHandler<TextResponse> {
     @Override
     TextResponse getResponse(User user, Message message) {
         return new TextResponse(
-                user.getId(),
+                user.getTlgUserId(),
                 messageService.getLocalizedMessage("err.unknown-command"),
                 List.of(
                         List.of(

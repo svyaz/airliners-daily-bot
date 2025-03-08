@@ -19,7 +19,7 @@ public class HelpHandlerBean extends AbstractRequestHandler<TextResponse> {
     @Override
     TextResponse getResponse(User user, Message message) {
         return new TextResponse(
-                user.getId(),
+                user.getTlgUserId(),
                 messageService.getLocalizedMessage("help.text"),
                 List.of(
                         List.of(

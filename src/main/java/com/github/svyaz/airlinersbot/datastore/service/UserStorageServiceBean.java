@@ -17,8 +17,8 @@ public class UserStorageServiceBean implements UserStorageService {
     private final UserMapper mapper;
 
     @Override
-    public Optional<User> find(Long id) {
-        return repository.findById(id)
+    public Optional<User> findByTlgUserId(Long tlgUserId) {
+        return repository.findByTlgUserId(tlgUserId)
                 .map(mapper::toUser);
     }
 

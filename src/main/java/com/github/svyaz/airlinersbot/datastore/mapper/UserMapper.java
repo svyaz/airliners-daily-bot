@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {SearchResultMapper.class, SubscriptionMapper.class}
+        uses = {SearchResultMapper.class/*, SubscriptionMapper.class*/}
 )
 public interface UserMapper {
 
     @Mapping(source = "searchResult", target = "searchResult", qualifiedByName = "mapSearchResult")
-    @Mapping(source = "subscriptions", target = "subscriptions", qualifiedByName = "mapSubscriptions")
+    //@Mapping(source = "subscriptions", target = "subscriptions", qualifiedByName = "mapSubscriptions")
     User toUser(UserEntity user);
 
     @Mapping(target = "lastVisitTime", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(source = "searchResult", target = "searchResult", qualifiedByName = "mapSearchResultEntity")
-    @Mapping(source = "subscriptions", target = "subscriptions", qualifiedByName = "mapSubscriptionEntities")
+    //@Mapping(source = "subscriptions", target = "subscriptions", qualifiedByName = "mapSubscriptionEntities")
     UserEntity toUserEntity(User user);
 
     @Named("mapSearchResult")

@@ -33,11 +33,12 @@ public class HandlerAspect {
             log.warn("proceedHandler -> {}", ex.getMessage());
             var request = (Request) joinPoint.getArgs()[0];
             return new TextResponse(
-                    request.user().getId(),
+                    request.user().getTlgUserId(),
                     messageService.getLocalizedMessage(ex.getMessageCode()),
                     List.of()
             );
         } catch (Throwable ex) {
+            log.error("proceedHandler -> {}", ex.getMessage());
             throw new RuntimeException(ex);
         }
     }

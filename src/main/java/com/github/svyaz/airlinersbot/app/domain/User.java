@@ -15,11 +15,12 @@ import java.util.EnumMap;
 public class User {
 
     private Long id;
+    private Long tlgUserId;
     private String userName;
     private String firstName;
     private String lastName;
     private String languageCode;
     private LocalDateTime registerTime;
     private SearchResult searchResult;
-    private EnumMap<SubscriptionType, Subscription> subscriptions;
+    //private EnumMap<SubscriptionType, Subscription> subscriptions;
 }

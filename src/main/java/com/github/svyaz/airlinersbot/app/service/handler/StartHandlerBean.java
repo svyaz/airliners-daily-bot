@@ -20,7 +20,7 @@ public class StartHandlerBean extends AbstractRequestHandler<TextResponse> {
     @Override
     TextResponse getResponse(User user, Message message) {
         return new TextResponse(
-                user.getId(),
+                user.getTlgUserId(),
                 Optional.ofNullable(user.getFirstName())
                         .map(name -> messageService.getLocalizedMessage("start.text-with-name", name))
                         .orElseGet(() -> messageService.getLocalizedMessage("start.text")),

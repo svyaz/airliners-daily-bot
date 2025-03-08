@@ -7,6 +7,7 @@ import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.service.picture.SearchPictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.*;
@@ -14,6 +15,7 @@ import java.util.*;
 import static com.github.svyaz.airlinersbot.conf.properties.Constants.SHOW_NEXT_CB_DATA;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SearchHandlerBean extends AbstractRequestHandler<PictureResponse> {
 
@@ -37,7 +39,7 @@ public class SearchHandlerBean extends AbstractRequestHandler<PictureResponse> {
                 ));
 
         return new PictureResponse(
-                user.getId(),
+                user.getTlgUserId(),
                 picture,
                 messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
                 List.of(buttonsRow)

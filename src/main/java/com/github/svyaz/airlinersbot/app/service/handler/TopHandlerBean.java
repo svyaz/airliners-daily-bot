@@ -26,7 +26,7 @@ public class TopHandlerBean extends AbstractRequestHandler<PictureResponse> {
         var picture = topPictureRequestService.get();
 
         return new PictureResponse(
-                user.getId(),
+                user.getTlgUserId(),
                 picture,
                 messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
                 List.of(

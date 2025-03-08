@@ -25,8 +25,10 @@ abstract class AbstractRequestHandler<R extends Response> implements RequestHand
 
     @Override
     public R handle(Request request) {
-        var updatedUser = userService.apply(request.user());
-        return getResponse(updatedUser, request.message());
+        var user = userService.findAndUpdate(request.user());
+        R response = getResponse(user, request.message());
+        userService.save(user);
+        return response;
     }
 
     protected InlineButton getTopButton() {

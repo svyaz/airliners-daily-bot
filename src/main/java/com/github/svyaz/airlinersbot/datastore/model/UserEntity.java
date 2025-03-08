@@ -18,7 +18,12 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(unique = true)
+    private Long tlgUserId;
+
     private String userName;
     private String firstName;
     private String lastName;
@@ -26,9 +31,10 @@ public class UserEntity {
     private LocalDateTime registerTime;
     private LocalDateTime lastVisitTime;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private SearchResultEntity searchResult;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<SubscriptionEntity> subscriptions;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Set<SubscriptionEntity> subscriptions;
 }

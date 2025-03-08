@@ -4,21 +4,23 @@ import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.datastore.service.UserStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceBean implements UserService {
 
     private final UserStorageService userStorageService;
 
     @Override
-    public User apply(User user) {
-        var updatedUser = userStorageService.find(user.getId())
+    public User findAndUpdate(User user) {
+        User updatedUser = userStorageService.findByTlgUserId(user.getTlgUserId())
                 .orElseGet(() ->
                         User.builder()
-                                .id(user.getId())
+                                .tlgUserId(user.getTlgUserId())
                                 .registerTime(LocalDateTime.now())
                                 .build()
                 );
@@ -27,7 +29,11 @@ public class UserServiceBean implements UserService {
         updatedUser.setLastName(user.getLastName());
         updatedUser.setUserName(user.getUserName());
         updatedUser.setLanguageCode(user.getLanguageCode());
+        return updatedUser;
+    }
 
-        return userStorageService.save(updatedUser);
+    @Override
+    public User save(User user) {
+        return userStorageService.save(user);
     }
 }

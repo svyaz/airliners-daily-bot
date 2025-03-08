@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserStorageService {
 
-    Optional<User> find(Long id);
+    Optional<User> findByTlgUserId(Long tlgUserId);
 
     User save(User user);
 }

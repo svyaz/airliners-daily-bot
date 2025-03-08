@@ -8,10 +8,12 @@ import com.github.svyaz.airlinersbot.app.exception.PictureNotFoundException;
 import com.github.svyaz.airlinersbot.datastore.service.UserStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SearchPictureServiceBean implements SearchPictureService {
 
@@ -29,8 +31,6 @@ public class SearchPictureServiceBean implements SearchPictureService {
                 .picture(picture)
                 .build());
 
-        userStorageService.save(user);
-
         return picture;
     }
 
@@ -45,8 +45,12 @@ public class SearchPictureServiceBean implements SearchPictureService {
 
         var picture = airlinersClient.getPictureByUri(nextPageUri);
 
-        user.getSearchResult().setPicture(picture);
-        userStorageService.save(user);
+        user.setSearchResult(SearchResult.builder()
+                .userId(user.getId())
+                .keywords(searchResult.getKeywords())
+                .picture(picture)
+                .build()
+        );
 
         return picture;
     }

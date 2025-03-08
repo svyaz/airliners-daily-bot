@@ -39,7 +39,7 @@ public class SearchNextHandlerBean extends AbstractRequestHandler<PictureRespons
                 ));
 
         return new PictureResponse(
-                user.getId(),
+                user.getTlgUserId(),
                 picture,
                 messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
                 List.of(buttonsRow)
