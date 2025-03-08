@@ -35,6 +35,7 @@ public class UserEntity {
     @JoinColumn(name = "user_id")
     private SearchResultEntity searchResult;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Set<SubscriptionEntity> subscriptions;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Set<SubscriptionEntity> subscriptions;
 }

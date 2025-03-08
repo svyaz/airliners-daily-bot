@@ -9,13 +9,12 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface SubscriptionMapper {
 
-    //@Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "id.userId", target = "userId")
-    @Mapping(source = "id.type", target = "type")
+    @Mapping(target = "userId", source = "id.userId")
+    @Mapping(target = "type", source = "id.type")
     Subscription toSubscription(SubscriptionEntity entity);
 
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "id.userId", source = "userId")
     @Mapping(target = "id.type", source = "type")
+    @Mapping(target = "updateTime", expression = "java(java.time.LocalDateTime.now())")
     SubscriptionEntity toSubscriptionEntity(Subscription subscription);
 }

@@ -3,9 +3,7 @@ package com.github.svyaz.airlinersbot.datastore.model;
 import com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus;
 import com.github.svyaz.airlinersbot.app.domain.SubscriptionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,17 +13,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "subscription")
+@EqualsAndHashCode(exclude = {"updateTime"})
 public class SubscriptionEntity {
 
     @EmbeddedId
     private SubscriptionId id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
-
-    @Enumerated(EnumType.STRING)
-    private SubscriptionType type;
 
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus status;

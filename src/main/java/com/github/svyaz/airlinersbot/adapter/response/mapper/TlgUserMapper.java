@@ -12,5 +12,6 @@ public interface TlgUserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "registerTime", ignore = true)
     @Mapping(target = "searchResult", ignore = true)
+    @Mapping(target = "subscriptions", ignore = true)
     com.github.svyaz.airlinersbot.app.domain.User toUser(User tlgUser);
 }

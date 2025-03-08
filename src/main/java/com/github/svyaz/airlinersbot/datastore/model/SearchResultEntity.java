@@ -17,14 +17,16 @@ import java.time.LocalDateTime;
 public class SearchResultEntity {
 
     @Id
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
+
     private String keywords;
     private String pictureUri;
     private String nextPictureUri;
     private LocalDateTime updateTime;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+//    @OneToOne
+//    @MapsId
+//    @JoinColumn(name = "user_id")
+//    private UserEntity user;
 }

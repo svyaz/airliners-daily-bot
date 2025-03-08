@@ -22,5 +22,5 @@ public class User {
     private String languageCode;
     private LocalDateTime registerTime;
     private SearchResult searchResult;
-    //private EnumMap<SubscriptionType, Subscription> subscriptions;
+    private EnumMap<SubscriptionType, Subscription> subscriptions;
 }
