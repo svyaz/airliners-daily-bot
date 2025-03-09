@@ -10,15 +10,16 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus.*;
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionType.*;
+import static com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus.ACTIVE;
+import static com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus.INACTIVE;
+import static com.github.svyaz.airlinersbot.app.domain.SubscriptionType.TOP;
 
 @Service
-public class SubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse> {
+public class UnsubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse> {
 
     @Override
     public RequestType myType() {
-        return RequestType.SUBSCRIBE_TOP;
+        return RequestType.UNSUBSCRIBE_TOP;
     }
 
     @Override
@@ -29,12 +30,12 @@ public class SubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse
 
         String msgCode;
 
-        if (INACTIVE.equals(subscription.getStatus())) {
-            subscription.setStatus(ACTIVE);
+        if (ACTIVE.equals(subscription.getStatus())) {
+            subscription.setStatus(INACTIVE);
             user.getSubscriptions().put(TOP, subscription);
-            msgCode = "subscription.top.subscribe";
+            msgCode = "subscription.top.unsubscribe";
         } else {
-            msgCode = "subscription.top.already-subscribed";
+            msgCode = "subscription.top.not-subscribed";
         }
 
         return new TextResponse(
