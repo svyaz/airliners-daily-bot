@@ -31,11 +31,11 @@ public class UserEntity {
     private LocalDateTime registerTime;
     private LocalDateTime lastVisitTime;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private SearchResultEntity searchResult;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Set<SubscriptionEntity> subscriptions;
 }

@@ -1,6 +1,6 @@
 package com.github.svyaz.airlinersbot.datastore.mapper;
 
-import com.github.svyaz.airlinersbot.app.domain.Subscription;
+import com.github.svyaz.airlinersbot.app.domain.subscription.Subscription;
 import com.github.svyaz.airlinersbot.datastore.model.SubscriptionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

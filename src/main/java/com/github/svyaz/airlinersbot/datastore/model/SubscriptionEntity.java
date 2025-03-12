@@ -1,7 +1,7 @@
 package com.github.svyaz.airlinersbot.datastore.model;
 
-import com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus;
-import com.github.svyaz.airlinersbot.app.domain.SubscriptionType;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionStatus;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import jakarta.persistence.*;
 import lombok.*;
 

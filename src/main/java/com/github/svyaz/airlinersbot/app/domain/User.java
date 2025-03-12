@@ -1,5 +1,7 @@
 package com.github.svyaz.airlinersbot.app.domain;
 
+import com.github.svyaz.airlinersbot.app.domain.subscription.Subscription;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

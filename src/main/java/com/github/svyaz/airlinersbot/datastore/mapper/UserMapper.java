@@ -1,8 +1,8 @@
 package com.github.svyaz.airlinersbot.datastore.mapper;
 
 import com.github.svyaz.airlinersbot.app.domain.SearchResult;
-import com.github.svyaz.airlinersbot.app.domain.Subscription;
-import com.github.svyaz.airlinersbot.app.domain.SubscriptionType;
+import com.github.svyaz.airlinersbot.app.domain.subscription.Subscription;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.datastore.model.SearchResultEntity;
 import com.github.svyaz.airlinersbot.datastore.model.SubscriptionEntity;

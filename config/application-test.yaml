@@ -26,6 +26,12 @@ spring:
       show_sql: true
     hibernate:
 #      ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:9092
+    top-pictures-topic-name: airliners-top-sending
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 bot:
   name: AirlinersDaily-Test-Bot

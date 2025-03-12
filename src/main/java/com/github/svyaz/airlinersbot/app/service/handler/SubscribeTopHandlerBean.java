@@ -1,6 +1,6 @@
 package com.github.svyaz.airlinersbot.app.service.handler;
 
-import com.github.svyaz.airlinersbot.app.domain.Subscription;
+import com.github.svyaz.airlinersbot.app.domain.subscription.Subscription;
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus.*;
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionType.*;
+import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionStatus.*;
+import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType.*;
 
 @Service
 public class SubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse> {

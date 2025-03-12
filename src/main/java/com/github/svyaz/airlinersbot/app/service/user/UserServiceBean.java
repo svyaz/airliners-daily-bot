@@ -1,12 +1,15 @@
 package com.github.svyaz.airlinersbot.app.service.user;
 
 import com.github.svyaz.airlinersbot.app.domain.User;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionStatus;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import com.github.svyaz.airlinersbot.datastore.service.UserStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -36,4 +39,14 @@ public class UserServiceBean implements UserService {
     public User save(User user) {
         return userStorageService.save(user);
     }
+
+    @Override
+    public List<User> getUsersWithTopSubscription() {
+        return userStorageService.getWithSubscriptions(
+                SubscriptionType.TOP,
+                SubscriptionStatus.ACTIVE
+        );
+    }
+
+
 }

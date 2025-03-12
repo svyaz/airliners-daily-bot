@@ -1,4 +1,4 @@
-package com.github.svyaz.airlinersbot.app.domain;
+package com.github.svyaz.airlinersbot.app.domain.subscription;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

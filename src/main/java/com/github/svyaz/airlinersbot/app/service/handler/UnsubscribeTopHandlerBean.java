@@ -1,6 +1,6 @@
 package com.github.svyaz.airlinersbot.app.service.handler;
 
-import com.github.svyaz.airlinersbot.app.domain.Subscription;
+import com.github.svyaz.airlinersbot.app.domain.subscription.Subscription;
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
@@ -10,9 +10,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus.ACTIVE;
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionStatus.INACTIVE;
-import static com.github.svyaz.airlinersbot.app.domain.SubscriptionType.TOP;
+import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionStatus.ACTIVE;
+import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionStatus.INACTIVE;
+import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType.TOP;
 
 @Service
 public class UnsubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse> {
