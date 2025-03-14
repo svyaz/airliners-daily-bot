@@ -5,11 +5,11 @@ import com.github.svyaz.airlinersbot.app.service.subscription.TopPictureSenderSe
 import com.github.svyaz.airlinersbot.datastore.service.PictureStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Component
 @RequiredArgsConstructor
@@ -28,8 +28,11 @@ public class TopPictureUpdateServiceBean implements TopPictureUpdateService {
             fixedDelayString = "${app.picture.update.fixedDelay}"
     )
     public void update() {
+        var currentPicture = pictureStorageService.getTop()
+                .orElse(null);
+
         Optional.ofNullable(airlinersClient.getTopPicture())
-                //todo: save only if it's new
+                .filter(Predicate.not(picture -> picture.equals(currentPicture)))
                 .ifPresent(picture -> {
                     pictureStorageService.save(picture);
                     senderService.send(picture);

@@ -54,7 +54,7 @@ app:
   picture:
     update:
       initialDelay: 1000
-      fixedDelay: 600000
+      fixedDelay: 60000
 
 logging:
   level:

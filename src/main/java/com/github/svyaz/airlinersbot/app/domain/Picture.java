@@ -1,9 +1,6 @@
 package com.github.svyaz.airlinersbot.app.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -12,6 +9,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"updateTime"})
 public class Picture {
     private Long id;
     private String photoFileUri;
