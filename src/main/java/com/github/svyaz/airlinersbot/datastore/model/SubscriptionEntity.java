@@ -6,14 +6,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "subscription")
-@EqualsAndHashCode(exclude = {"updateTime"})
 public class SubscriptionEntity {
 
     @EmbeddedId
@@ -21,8 +19,6 @@ public class SubscriptionEntity {
 
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus status;
-
-    private LocalDateTime updateTime;
 
     @Data
     @NoArgsConstructor

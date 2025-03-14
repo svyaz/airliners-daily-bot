@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: svyaz
+      changes:
+        - createTable:
+            tableName: subscription
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+                    foreignKeyName: subs_user_id_fk
+                    references: user(id)
+              - column:
+                  name: type
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(100)
+        - addUniqueConstraint:
+            tableName: subscription
+            columnNames: user_id, type
+            constraintName: subs_user_id_type_uk
+        - createIndex:
+            tableName: subscription
+            indexName: subs_user_id_idx
+            column:
+              - column:
+                  name: user_id

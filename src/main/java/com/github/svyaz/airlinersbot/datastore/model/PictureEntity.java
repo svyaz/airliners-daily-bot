@@ -55,6 +55,6 @@ public class PictureEntity {
 
     private String authorCountry;
 
-    private LocalDateTime updateTime; //todo index
+    private LocalDateTime updateTime;
 
 }

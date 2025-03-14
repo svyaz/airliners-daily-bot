@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: svyaz
+      changes:
+        - createTable:
+            tableName: picture
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: false
+                  remarks: Airliners.net identifier
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: picture_id_pk
+                    nullable: false
+              - column:
+                  name: photo_file_uri
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_page_uri
+                  type: varchar(1000)
+              - column:
+                  name: photo_page_uri
+                  type: varchar(1000)
+              - column:
+                  name: airline
+                  type: varchar(500)
+              - column:
+                  name: aircraft
+                  type: varchar(500)
+              - column:
+                  name: registration
+                  type: varchar(100)
+              - column:
+                  name: location
+                  type: varchar(500)
+              - column:
+                  name: date
+                  type: varchar(100)
+              - column:
+                  name: content
+                  type: clob
+              - column:
+                  name: author
+                  type: varchar(500)
+              - column:
+                  name: author_country
+                  type: varchar(100)
+              - column:
+                  name: update_time
+                  type: datetime
+        - createIndex:
+            tableName: picture
+            indexName: pic_utime_idx
+            column:
+              - column:
+                  name: update_time
+

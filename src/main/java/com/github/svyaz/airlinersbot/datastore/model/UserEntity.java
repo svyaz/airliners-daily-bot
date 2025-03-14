@@ -32,10 +32,10 @@ public class UserEntity {
     private LocalDateTime lastVisitTime;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
     private SearchResultEntity searchResult;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Set<SubscriptionEntity> subscriptions;
 }

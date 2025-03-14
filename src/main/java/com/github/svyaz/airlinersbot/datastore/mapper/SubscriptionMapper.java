@@ -15,6 +15,5 @@ public interface SubscriptionMapper {
 
     @Mapping(target = "id.userId", source = "userId")
     @Mapping(target = "id.type", source = "type")
-    @Mapping(target = "updateTime", expression = "java(java.time.LocalDateTime.now())")
     SubscriptionEntity toSubscriptionEntity(Subscription subscription);
 }

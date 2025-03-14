@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: svyaz
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_id_pk
+                    nullable: false
+              - column:
+                  name: tlg_user_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: user_tlg_uk
+              - column:
+                  name: user_name
+                  type: varchar(1000)
+              - column:
+                  name: first_name
+                  type: varchar(1000)
+              - column:
+                  name: last_name
+                  type: varchar(1000)
+              - column:
+                  name: language_code
+                  type: varchar(10)
+              - column:
+                  name: register_time
+                  type: datetime
+              - column:
+                  name: last_visit_time
+                  type: datetime
+        - createIndex:
+            tableName: user
+            indexName: user_tlg_id_idx
+            column:
+              - column:
+                  name: tlg_user_id

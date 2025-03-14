@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: svyaz
+      changes:
+        - createTable:
+            tableName: search_result
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: sr_user_id_pk
+                    nullable: false
+                    foreignKeyName: sr_user_id_fk
+                    references: user(id)
+              - column:
+                  name: keywords
+                  type: varchar(1000)
+              - column:
+                  name: picture_uri
+                  type: varchar(1000)
+              - column:
+                  name: next_picture_uri
+                  type: varchar(1000)
+              - column:
+                  name: update_time
+                  type: datetime

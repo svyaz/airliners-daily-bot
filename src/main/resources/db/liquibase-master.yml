@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: 2025-03-13_01_user_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 2025-03-13_02_search_result_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 2025-03-13_03_subscription_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 2025-03-13_04_picture_table.yml
+      relativeToChangelogFile: true
