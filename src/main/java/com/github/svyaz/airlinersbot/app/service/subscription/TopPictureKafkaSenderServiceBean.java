@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TopPictureSenderServiceBean implements TopPictureSenderService {
+public class TopPictureKafkaSenderServiceBean implements TopPictureKafkaSenderService {
 
     private final UserService userService;
 

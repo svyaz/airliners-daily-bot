@@ -36,6 +36,10 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     top-pictures-topic-name: airliners-top-sending
+    group-id: airliners-bot-app-group
+    auto-offset-reset: earliest
+    core-pool-size: 3
+    max-pool-size: 3
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -54,7 +58,7 @@ app:
   picture:
     update:
       initialDelay: 1000
-      fixedDelay: 60000
+      fixedDelay: 180000
 
 logging:
   level:

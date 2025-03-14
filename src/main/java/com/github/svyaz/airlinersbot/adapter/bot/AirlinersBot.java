@@ -23,8 +23,10 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@Component
-public class AirlinersBot extends TelegramLongPollingBot implements InitializingBean {
+@Component(AirlinersBot.BOT_COMPONENT_NAME)
+public class AirlinersBot extends TelegramLongPollingBot implements InitializingBean, SubscriptionsSender {
+
+    public static final String BOT_COMPONENT_NAME = "BOT_COMPONENT";
 
     private final Set<Long> inProgress;
     private final String botName;
@@ -85,6 +87,14 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
                 inProgress.remove(request.user().getId());
             }
         });
+    }
+
+    @Override
+    //todo: rate-limiter
+    public void accept(Response response) {
+        Optional.ofNullable(responseMappers.get(response.getType()))
+                .map(mapper -> mapper.apply(response))
+                .ifPresent(this::sendSafe);
     }
 
     private Message sendSafe(ResponseDto<?> dto) {

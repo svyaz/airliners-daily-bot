@@ -1,7 +1,7 @@
 package com.github.svyaz.airlinersbot.app.service.picture;
 
 import com.github.svyaz.airlinersbot.adapter.client.AirlinersClient;
-import com.github.svyaz.airlinersbot.app.service.subscription.TopPictureSenderService;
+import com.github.svyaz.airlinersbot.app.service.subscription.TopPictureKafkaSenderService;
 import com.github.svyaz.airlinersbot.datastore.service.PictureStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class TopPictureUpdateServiceBean implements TopPictureUpdateService {
 
     private final PictureStorageService pictureStorageService;
 
-    private final TopPictureSenderService senderService;
+    private final TopPictureKafkaSenderService senderService;
 
     @Override
     @Scheduled(
