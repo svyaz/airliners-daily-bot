@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.9.0'
     implementation 'org.hibernate.orm:hibernate-core:6.6.3.Final'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot2:2.3.0'
 
     //implementation 'com.h2database:h2:2.3.232'
     implementation 'org.postgresql:postgresql:42.7.2'

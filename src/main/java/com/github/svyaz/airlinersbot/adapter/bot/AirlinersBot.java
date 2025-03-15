@@ -8,6 +8,7 @@ import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
 import com.github.svyaz.airlinersbot.conf.properties.BotProperties;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -90,7 +91,7 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
     }
 
     @Override
-    //todo: rate-limiter
+    @RateLimiter(name = "subscrSendingLimiter")
     public void accept(Response response) {
         Optional.ofNullable(responseMappers.get(response.getType()))
                 .map(mapper -> mapper.apply(response))
