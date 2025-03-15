@@ -32,7 +32,7 @@ public class UserServiceBean implements UserService {
         updatedUser.setLastName(user.getLastName());
         updatedUser.setUserName(user.getUserName());
         updatedUser.setLanguageCode(user.getLanguageCode());
-        return updatedUser;
+        return save(updatedUser);
     }
 
     @Override

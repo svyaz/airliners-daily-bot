@@ -4,10 +4,13 @@ import com.github.svyaz.airlinersbot.app.domain.subscription.Subscription;
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
+import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionStatus.ACTIVE;
@@ -24,6 +27,10 @@ public class UnsubscribeTopHandlerBean extends AbstractRequestHandler<TextRespon
 
     @Override
     TextResponse getResponse(User user, Message message) {
+        if (Objects.isNull(user.getSubscriptions())) {
+            user.setSubscriptions(new EnumMap<>(SubscriptionType.class));
+        }
+
         var subscription = Optional.ofNullable(user.getSubscriptions())
                 .map(subs -> subs.get(TOP))
                 .orElseGet(() -> new Subscription(user.getId(), TOP, INACTIVE));
