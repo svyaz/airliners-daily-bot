@@ -5,6 +5,34 @@ spring:
   application:
     name: AirlinersDailyBot
 
+  datasource:
+    url: jdbc:postgresql://localhost:5433/airliners-bot
+    username: app
+    password: app
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    properties.hibernate:
+      globally_quoted_identifiers: true
+      show_sql: false
+    hibernate:
+      ddl-auto: none
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/liquibase-master.yml
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    top-pictures-topic-name: airliners-top-sending
+    group-id: airliners-bot-app-group
+    auto-offset-reset: earliest
+    core-pool-size: 3
+    max-pool-size: 3
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 bot:
   name: AirlinersDailyBot
   token: ${BOT_TOKEN}
@@ -16,7 +44,21 @@ client:
 
 app:
   defaultLangCode: ru
+  picture:
+    update:
+      initialDelay: 1000
+      fixedDelay: 180000
 
-logging.level.root: info
-logging.level.com.github.svyaz: debug
-logging.level.org.telegram: trace
+resilience4j:
+  ratelimiter:
+    instances:
+      subscrSendingLimiter:
+        limit-for-period: 10
+        limit-refresh-period: 1s
+        timeout-duration: 10s
+
+logging:
+  level:
+    root: info
+    com.github.svyaz: info
+    org.telegram: info
