@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: svyaz
+      changes:
+        - createSequence:
+            sequenceName: user_seq
+            startValue: 555
+            incrementBy: 1
+            minValue: 1
+            maxValue: 999999999
+            cycle: false
+            cacheSize: 10
