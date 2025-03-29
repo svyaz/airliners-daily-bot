@@ -12,5 +12,7 @@ public class PictureMessage {
 
     private Long tlgUserId;
 
+    private String languageCode;
+
     private Picture picture;
 }

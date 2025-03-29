@@ -19,7 +19,11 @@ public class TopPictureKafkaSenderServiceBean implements TopPictureKafkaSenderSe
     public void send(Picture picture) {
         userService.getUsersWithTopSubscription()
                 .stream()
-                .map(user -> new PictureMessage(user.getTlgUserId(), picture))
+                .map(user -> new PictureMessage(
+                        user.getTlgUserId(),
+                        user.getLanguageCode(),
+                        picture)
+                )
                 .forEach(sender::send);
     }
 }

@@ -5,8 +5,10 @@ import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.domain.subscription.PictureMessage;
 import com.github.svyaz.airlinersbot.app.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -19,6 +21,11 @@ public class TopPictureUserSenderServiceBean implements TopPictureUserSenderServ
 
     @Override
     public void accept(PictureMessage message) {
+        Optional.of(message)
+                .map(PictureMessage::getLanguageCode)
+                .map(Locale::of)
+                .ifPresent(LocaleContextHolder::setLocale);
+
         Optional.of(message)
                 .map(msg -> new PictureResponse(
                         msg.getTlgUserId(),
