@@ -51,13 +51,19 @@ app:
       initialDelay: 1000
       fixedDelay: 180000
 
-resilience4j:
-  ratelimiter:
-    instances:
-      subscrSendingLimiter:
-        limit-for-period: 1
-        limit-refresh-period: 1s
-        timeout-duration: 10s
+#resilience4j:
+#  ratelimiter:
+#    instances:
+#      subscrSendingLimiter:
+#        limit-for-period: 1
+#        limit-refresh-period: 1s
+#        timeout-duration: 10s
+
+ratelimiter:
+  properties:
+    subscrSendingLimiter:
+      callsNumber: 1
+      periodMillis: 5000
 
 logging:
   level:
