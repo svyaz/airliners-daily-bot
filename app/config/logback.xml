@@ -37,9 +37,9 @@
     </root>
 
     <!-- LOG "com.github.svyaz*" at TRACE level -->
-    <logger name="com.github.svyaz" level="trace" additivity="false">
+    <!--<logger name="com.github.svyaz" level="trace" additivity="false">
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
-    </logger>
+    </logger>-->
 
 </configuration>

@@ -6,7 +6,7 @@ spring:
     name: AirlinersDailyBot
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/airliners-bot
+    url: jdbc:postgresql://109.73.207.27:5433/airliners-bot
     username: app
     password: app
     driverClassName: org.postgresql.Driver
@@ -23,7 +23,7 @@ spring:
     change-log: classpath:db/liquibase-master.yml
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 109.73.207.27:9092
     top-pictures-topic-name: airliners-top-sending
     group-id: airliners-bot-app-group
     auto-offset-reset: earliest
