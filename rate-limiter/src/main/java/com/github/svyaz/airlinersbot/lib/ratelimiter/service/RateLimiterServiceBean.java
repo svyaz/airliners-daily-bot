@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,28 +20,18 @@ public class RateLimiterServiceBean implements RateLimiterService {
 
     @Override
     public long getDelay(String limiterName) {
-        long callTime = System.currentTimeMillis();
-        long firstWaitingCallTime = callTime;
-
-        var props = config.getProperties().get(limiterName);
+        var callTime = System.currentTimeMillis();
+        var timeWindow = config.getProperties().get(limiterName).getPeriodMillis();
+        var callsNumber = config.getProperties().get(limiterName).getCallsNumber();
         var queue = requestsQueue.get(limiterName);
-        var iterator = queue.iterator();
 
-        while (iterator.hasNext()) {
-            long entry = iterator.next();
-            if (callTime - entry >= props.getPeriodMillis()) {
-                //протух запрос
-                iterator.remove();
-            } else {
-                // если попали сюда, значит удалили все протухшие запросы
-                firstWaitingCallTime = entry;
-                break;
-            }
+        while(!queue.isEmpty() && queue.peek() <= callTime - timeWindow) {
+            queue.poll();
         }
 
-        long delay = (queue.size() < props.getCallsNumber()) ?
+        long delay = queue.size() < callsNumber ?
                 0L :
-                props.getPeriodMillis() - (callTime - firstWaitingCallTime);
+                timeWindow - (callTime - Optional.ofNullable(queue.peek()).orElse(callTime));
 
         queue.add(callTime);
 
