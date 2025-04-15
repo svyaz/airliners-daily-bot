@@ -9,7 +9,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"updateTime"})
+@EqualsAndHashCode(of = {"id"})
 public class Picture {
     private Long id;
     private String photoFileUri;
