@@ -44,8 +44,13 @@ client:
   maxBufferSize: 1024000
   userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
 
+translationClient:
+  baseUrl: http://localhost:5000
+  maxBufferSize: 256000
+  userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
+
 app:
-  defaultLangCode: ru
+  defaultLangCode: en
   picture:
     update:
       initialDelay: 1000
@@ -70,4 +75,5 @@ logging:
     root: info
     com.github.svyaz: debug
     org.telegram: trace
+#    org.springframework: debug
 #    org.springframework.web: trace

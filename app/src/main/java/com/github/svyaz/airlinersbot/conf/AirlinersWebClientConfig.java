@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Getter
 @Configuration
-public class WebClientConfig {
+public class AirlinersWebClientConfig {
 
     @Value("${client.baseUrl}")
     private String baseUrl;
@@ -22,7 +22,7 @@ public class WebClientConfig {
     @Value(("${client.userAgent}"))
     private String userAgent;
 
-    @Bean
+    @Bean(name = "airlinersWebClient")
     public WebClient webClient() {
         return WebClient.builder()
                 .uriBuilderFactory(new CustomUriBuilderFactory(baseUrl))

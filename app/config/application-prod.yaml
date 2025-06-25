@@ -43,19 +43,25 @@ client:
   userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
 
 app:
-  defaultLangCode: ru
+  defaultLangCode: en
   picture:
     update:
       initialDelay: 1000
       fixedDelay: 180000
 
-resilience4j:
-  ratelimiter:
-    instances:
-      subscrSendingLimiter:
-        limit-for-period: 10
-        limit-refresh-period: 1s
-        timeout-duration: 10s
+#resilience4j:
+#  ratelimiter:
+#    instances:
+#      subscrSendingLimiter:
+#        limit-for-period: 10
+#        limit-refresh-period: 1s
+#        timeout-duration: 10s
+
+ratelimiter:
+  properties:
+    subscrSendingLimiter:
+      callsNumber: 10
+      periodMillis: 1000
 
 logging:
   level:
