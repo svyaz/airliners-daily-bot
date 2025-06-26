@@ -30,7 +30,6 @@ public class Picture {
         this.nextPageUri = nextPageUri;
     }
 
-    //todo : сделать фильтрацию в парсере чтобы вместо "-" и пустых строк был null.
     public Object[] getCaptionArgs() {
         return new Object[]{
                 // title with link
@@ -38,17 +37,17 @@ public class Picture {
                         .map(u -> String.format("<a href='%s'>%d</a>", u, id))
                         .orElseGet(() -> String.format("%d", id)),
                 // airline
-                Optional.ofNullable(airline).orElse("-"),
+                Optional.ofNullable(airline).orElse(""),
                 // aircraft
-                Optional.ofNullable(aircraft).orElse("-"),
+                Optional.ofNullable(aircraft).orElse(""),
                 // registration
-                Optional.ofNullable(registration).orElse("-"),
+                Optional.ofNullable(registration).orElse(""),
                 // location
-                Optional.ofNullable(location).orElse("-"),
+                Optional.ofNullable(location).orElse(""),
                 // date
-                Optional.ofNullable(date).orElse("-"),
+                Optional.ofNullable(date).orElse(""),
                 // author
-                Optional.ofNullable(author).orElse("-"),
+                Optional.ofNullable(author).orElse(""),
                 // author country
                 Optional.ofNullable(authorCountry)
                         .map(ac -> String.format("(%s)", ac))

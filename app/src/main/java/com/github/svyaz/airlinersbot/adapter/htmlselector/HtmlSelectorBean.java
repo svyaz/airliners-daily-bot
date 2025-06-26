@@ -32,6 +32,8 @@ public class HtmlSelectorBean implements HtmlSelector {
     private static final String AUTHOR_COUNTRY_SELECTOR = "div.pib-section-photographer span.ua-country";
     private static final String PHOTO_FILE_URI_SELECTOR = "div.pdp-image-wrapper img";
 
+    private static final String EMPTY_CONTENT_REPLACER = "-";
+
     @Override
     public String getTopPicturePageUri(String html) {
         return Optional.ofNullable(Jsoup.parse(html)
@@ -77,6 +79,7 @@ public class HtmlSelectorBean implements HtmlSelector {
         return Optional.of(document)
                 .map(d -> d.select(query))
                 .map(Elements::text)
+                .filter(Predicate.not(EMPTY_CONTENT_REPLACER::equals))
                 .orElse(null);
     }
 
@@ -85,6 +88,7 @@ public class HtmlSelectorBean implements HtmlSelector {
                 .map(d -> d.select(query))
                 .map(e -> e.attr(attrName))
                 .filter(Predicate.not(String::isEmpty))
+                .filter(Predicate.not(EMPTY_CONTENT_REPLACER::equals))
                 .orElse(null);
     }
 
