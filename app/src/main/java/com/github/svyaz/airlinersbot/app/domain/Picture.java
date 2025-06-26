@@ -18,9 +18,9 @@ public class Picture {
     private String airline;
     private String aircraft;
     private String registration;
-    private String location;
+    @Translatable private String location;
     private String date;
-    private String content;
+    @Translatable private String content;
     private String author;
     private String authorCountry;
     private LocalDateTime updateTime;
@@ -30,6 +30,7 @@ public class Picture {
         this.nextPageUri = nextPageUri;
     }
 
+    //todo : сделать фильтрацию в парсере чтобы вместо "-" и пустых строк был null.
     public Object[] getCaptionArgs() {
         return new Object[]{
                 // title with link
