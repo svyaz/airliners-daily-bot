@@ -21,10 +21,7 @@ public class HelpHandlerBean extends AbstractRequestHandler<TextResponse> {
         return new TextResponse(
                 user.getTlgUserId(),
                 messageService.getLocalizedMessage("help.text"),
-                List.of(
-                        List.of(
-                                getTopButton()
-                        )
-                ));
+                buttonsService.getButtons()
+        );
     }
 }

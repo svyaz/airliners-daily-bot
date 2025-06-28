@@ -2,10 +2,10 @@ package com.github.svyaz.airlinersbot.app.service.handler;
 
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.Request;
-import com.github.svyaz.airlinersbot.app.domain.response.InlineButton;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
-import com.github.svyaz.airlinersbot.app.service.button.ButtonSupplier;
+import com.github.svyaz.airlinersbot.app.service.button.ButtonsService;
 import com.github.svyaz.airlinersbot.app.service.message.MessageService;
+import com.github.svyaz.airlinersbot.app.service.translate.PictureTranslateService;
 import com.github.svyaz.airlinersbot.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,10 @@ abstract class AbstractRequestHandler<R extends Response> implements RequestHand
     protected MessageService messageService;
 
     @Autowired
-    private ButtonSupplier buttonSupplier;
+    protected ButtonsService buttonsService;
+
+    @Autowired
+    protected PictureTranslateService translateService;
 
     @Autowired
     private UserService userService;
@@ -33,7 +36,4 @@ abstract class AbstractRequestHandler<R extends Response> implements RequestHand
         return response;
     }
 
-    protected InlineButton getTopButton() {
-        return buttonSupplier.getButton();
-    }
 }

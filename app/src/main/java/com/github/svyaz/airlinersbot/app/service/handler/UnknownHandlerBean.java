@@ -6,8 +6,6 @@ import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.List;
-
 @Service
 public class UnknownHandlerBean extends AbstractRequestHandler<TextResponse> {
 
@@ -21,11 +19,7 @@ public class UnknownHandlerBean extends AbstractRequestHandler<TextResponse> {
         return new TextResponse(
                 user.getTlgUserId(),
                 messageService.getLocalizedMessage("err.unknown-command"),
-                List.of(
-                        List.of(
-                                getTopButton()
-                        )
-                )
+                buttonsService.getButtons()
         );
     }
 }

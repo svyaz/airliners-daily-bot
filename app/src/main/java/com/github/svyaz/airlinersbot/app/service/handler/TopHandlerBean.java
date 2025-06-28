@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,18 +23,17 @@ public class TopHandlerBean extends AbstractRequestHandler<PictureResponse> {
 
     @Override
     PictureResponse getResponse(User user, Message message) {
-        var picture = topPictureRequestService.get();
-
-        return new PictureResponse(
-                user.getTlgUserId(),
-                picture,
-                messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
-                List.of(
-                        List.of(
-                                getTopButton()
+        return Optional.ofNullable(topPictureRequestService.get())
+                .map(picture -> translateService.translate(picture, user.getLanguageCode()))
+                .map(picture ->
+                        new PictureResponse(
+                                user.getTlgUserId(),
+                                picture,
+                                messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
+                                buttonsService.getButtons(picture)
                         )
                 )
-        );
+                .orElse(null);
     }
 
 }

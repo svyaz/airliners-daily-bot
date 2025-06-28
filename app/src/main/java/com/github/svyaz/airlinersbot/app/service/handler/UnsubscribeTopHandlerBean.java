@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -48,9 +47,7 @@ public class UnsubscribeTopHandlerBean extends AbstractRequestHandler<TextRespon
         return new TextResponse(
                 user.getTlgUserId(),
                 messageService.getLocalizedMessage(msgCode),
-                List.of(
-                        List.of(getTopButton())
-                )
+                buttonsService.getButtons()
         );
     }
 }

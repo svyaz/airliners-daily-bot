@@ -7,20 +7,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import static com.github.svyaz.airlinersbot.conf.properties.Constants.SHOW_TOP_CB_DATA;
+import java.util.Optional;
+
+import static com.github.svyaz.airlinersbot.conf.properties.Constants.SHOW_NEXT_CB_DATA;
 
 @Component
-@Order(1)
+@Order(2)
 @RequiredArgsConstructor
-public class TopButtonSupplier implements ButtonSupplier {
+public class NextPageButtonSupplier implements ButtonSupplier {
 
     private final MessageService messageService;
 
     @Override
     public InlineButton getButton(Picture picture) {
-        return new InlineButton(
-                SHOW_TOP_CB_DATA,
-                messageService.getLocalizedMessage("button.show-top")
-        );
+        return Optional.ofNullable(picture.getNextPageUri())
+                .map(uri -> new InlineButton(
+                        SHOW_NEXT_CB_DATA,
+                        messageService.getLocalizedMessage("button.search-next"))
+                )
+                .orElse(null);
     }
 }
