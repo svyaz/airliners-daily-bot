@@ -1,5 +1,6 @@
 package com.github.svyaz.airlinersbot.app.service.translate;
 
+import com.github.svyaz.airlinersbot.adapter.client.TranslationClient;
 import com.github.svyaz.airlinersbot.app.domain.Picture;
 import com.github.svyaz.airlinersbot.app.domain.Translatable;
 import com.github.svyaz.airlinersbot.conf.CacheConfig;
@@ -21,9 +22,13 @@ public class PictureTranslateServiceBean implements PictureTranslateService {
 
     private final TranslationConfig translationConfig;
 
+    private final TranslationClient client;
+
     @Cacheable(value = CacheConfig.PICTURE_LANG_CACHE, key = "#picture.id + '_' + #langCode")
     @Override
     public Picture translate(Picture picture, String langCode) {
+        log.debug("translate <- picture [{}], langCode [{}]", picture, langCode);
+
         return Optional.of(langCode)
                 .filter(Predicate.not(code -> translationConfig.getDefaultLangCode().equals(code)))
                 .filter(code -> translationConfig.getTranslations().contains(code))
@@ -33,21 +38,24 @@ public class PictureTranslateServiceBean implements PictureTranslateService {
 
     @SneakyThrows
     private Picture translateFields(Picture picture, String langCode) {
-        for (Field field : picture.getClass().getDeclaredFields()){
+        var newPicture = picture.clone();
+
+        for (Field field : newPicture.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Translatable.class)) {
+                log.debug("translateFields: field [{}], langCode [{}]", field.getName(), langCode);
+
                 field.setAccessible(true);
-                String origValue = (String) field.get(picture);
-                String translatedValue = tr(origValue, langCode);
-                field.set(picture, translatedValue);
+                var origValue = (String) field.get(newPicture);
+
+                var newValue = Optional.ofNullable(origValue)
+                        .map(v -> client.translate(v, langCode))
+                        .orElse(origValue);
+
+                field.set(newPicture, newValue);
             }
         }
 
-        return picture;
-    }
-
-    //todo : вместо этого - вызов сервиса в адаптере
-    private String tr(String fieldValue, String langCode) {
-        return fieldValue;
+        return newPicture;
     }
 
 }

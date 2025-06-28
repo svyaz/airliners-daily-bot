@@ -10,7 +10,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-public class Picture {
+public class Picture implements Cloneable {
     private Long id;
     private String photoFileUri;
     private String nextPageUri;
@@ -19,15 +19,20 @@ public class Picture {
     private String aircraft;
     private String registration;
     @Translatable private String location;
-    private String date;
+    @Translatable private String date;
     @Translatable private String content;
     private String author;
-    private String authorCountry;
+    @Translatable private String authorCountry;
     private LocalDateTime updateTime;
 
     public Picture(String photoFileUri, String nextPageUri) {
         this.photoFileUri = photoFileUri;
         this.nextPageUri = nextPageUri;
+    }
+
+    @Override
+    public Picture clone() throws CloneNotSupportedException {
+        return (Picture) super.clone();
     }
 
     public Object[] getCaptionArgs() {
