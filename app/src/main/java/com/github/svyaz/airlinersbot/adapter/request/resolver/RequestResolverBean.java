@@ -3,11 +3,14 @@ package com.github.svyaz.airlinersbot.adapter.request.resolver;
 import com.github.svyaz.airlinersbot.adapter.response.mapper.TlgUserMapper;
 import com.github.svyaz.airlinersbot.app.domain.request.Request;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
+import com.github.svyaz.airlinersbot.app.domain.request.UpdateType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.svyaz.airlinersbot.conf.properties.Constants.*;
+import java.util.Arrays;
+
+import static com.github.svyaz.airlinersbot.app.domain.request.RequestType.UNKNOWN_COMMAND;
 
 @Component
 @RequiredArgsConstructor
@@ -17,43 +20,29 @@ public class RequestResolverBean implements RequestResolver {
 
     @Override
     public Request apply(Update update) {
-        // Resolve text commands
-        if (update.hasMessage()) {
-            return new Request(
-                    getTextCommandType(update),
-                    userMapper.toUser(update.getMessage().getFrom()),
-                    update.getMessage()
-            );
-        }
+        return Arrays.stream(UpdateType.values())
+                .filter(updateType -> updateType.getFilter().test(update))
+                .findFirst()
+                .map(updateType -> {
+                            var testText = updateType.getTestTextGetter().apply(update);
+                            var tlgUser = updateType.getTlgUserGetter().apply(update);
+                            var tlgMessage = updateType.getMessageGetter().apply(update);
 
-        // Resolve callbacks
-        if (update.hasCallbackQuery()) {
-            return new Request(
-                    getCallbackCommandType(update),
-                    userMapper.toUser(update.getCallbackQuery().getFrom()),
-                    update.getCallbackQuery().getMessage()
-            );
-        }
-
-        return new Request(RequestType.UNKNOWN_COMMAND, null, null);
-    }
-
-    private RequestType getTextCommandType(Update update) {
-        return switch (update.getMessage().getText()) {
-            case START_COMMAND -> RequestType.START;
-            case HELP_COMMAND -> RequestType.HELP;
-            case SUBSCRIBE_TOP_COMMAND -> RequestType.SUBSCRIBE_TOP;
-            case UNSUBSCRIBE_TOP_COMMAND -> RequestType.UNSUBSCRIBE_TOP;
-            default -> RequestType.SEARCH;
-        };
-    }
-
-    private RequestType getCallbackCommandType(Update update) {
-        return switch (update.getCallbackQuery().getData()) {
-            case SHOW_TOP_CB_DATA -> RequestType.TOP;
-            case SHOW_NEXT_CB_DATA -> RequestType.SEARCH_NEXT;
-            default -> RequestType.UNKNOWN_COMMAND;
-        };
+                            return Arrays.stream(RequestType.values())
+                                    .filter(requestType -> requestType.getUpdateType().equals(updateType))
+                                    .filter(requestType -> requestType.getFilter().test(testText))
+                                    .findFirst()
+                                    .map(requestType ->
+                                            new Request(
+                                                    requestType,
+                                                    userMapper.toUser(tlgUser),
+                                                    tlgMessage
+                                            )
+                                    )
+                                    .orElse(null);
+                        }
+                )
+                .orElseGet(() -> new Request(UNKNOWN_COMMAND, null, null));
     }
 
 }

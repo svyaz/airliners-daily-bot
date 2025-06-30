@@ -1,0 +1,37 @@
+package com.github.svyaz.airlinersbot.app.domain.request;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+@Getter
+@RequiredArgsConstructor
+public enum UpdateType {
+    COMMAND(
+            Update::hasMessage,
+            u -> u.getMessage().getText(),
+            u -> u.getMessage().getFrom(),
+            Update::getMessage),
+
+    CALLBACK_BUTTON(
+            Update::hasCallbackQuery,
+            u -> u.getCallbackQuery().getData(),
+            u -> u.getCallbackQuery().getFrom(),
+            u -> u.getCallbackQuery().getMessage()),
+
+    UNKNOWN(
+            update -> true,
+            u -> null,
+            u -> null,
+            u -> null);
+
+    final Predicate<Update> filter;
+    final Function<Update, String> testTextGetter;
+    final Function<Update, User> tlgUserGetter;
+    final Function<Update, Message> messageGetter;
+}
