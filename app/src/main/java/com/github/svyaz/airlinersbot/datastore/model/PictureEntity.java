@@ -1,8 +1,7 @@
 package com.github.svyaz.airlinersbot.datastore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.github.svyaz.airlinersbot.app.domain.PictureType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,5 +55,8 @@ public class PictureEntity {
     private String authorCountry;
 
     private LocalDateTime updateTime;
+
+    @Enumerated(EnumType.STRING)
+    private PictureType pictureType;
 
 }

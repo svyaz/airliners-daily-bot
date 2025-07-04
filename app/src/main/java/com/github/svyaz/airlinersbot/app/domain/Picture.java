@@ -24,6 +24,7 @@ public class Picture implements Cloneable {
     private String author;
     @Translatable private String authorCountry;
     private LocalDateTime updateTime;
+    private PictureType pictureType;
 
     public Picture(String photoFileUri, String nextPageUri) {
         this.photoFileUri = photoFileUri;

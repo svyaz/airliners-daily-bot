@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: svyaz
+      changes:
+        - addColumn:
+            tableName: picture
+            columns:
+            - column:
+                name: picture_type
+                type: varchar(20)
+        - update:
+            tableName: picture
+            columns:
+            - column:
+                name: picture_type
+                value: TOP
+            where: 1=1

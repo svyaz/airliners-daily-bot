@@ -14,3 +14,6 @@ databaseChangeLog:
   - include:
       file: 2025-03-18_05_user_sequence.yml
       relativeToChangelogFile: true
+  - include:
+      file: 2025-07-04_06_pictureType_field.yml
+      relativeToChangelogFile: true
