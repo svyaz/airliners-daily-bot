@@ -6,5 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public record Request(
     RequestType type,
     User user,
-    Message message) {  //todo: тут должна быть domain-модель для Message!
+    Message message,
+    String testText) {
 }

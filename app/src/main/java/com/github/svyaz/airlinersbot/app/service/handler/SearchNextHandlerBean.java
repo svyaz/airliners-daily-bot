@@ -6,7 +6,6 @@ import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.service.picture.SearchPictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ public class SearchNextHandlerBean extends AbstractRequestHandler<PictureRespons
     }
 
     @Override
-    PictureResponse getResponse(User user, Message message) {
+    PictureResponse getResponse(User user, String testText) {
         return Optional.ofNullable(searchPictureService.next(user))
                 .map(picture -> translateService.translate(picture, user.getLanguageCode()))
                 .map(picture ->

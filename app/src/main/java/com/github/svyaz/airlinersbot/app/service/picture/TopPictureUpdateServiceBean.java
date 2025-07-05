@@ -1,6 +1,7 @@
 package com.github.svyaz.airlinersbot.app.service.picture;
 
 import com.github.svyaz.airlinersbot.adapter.client.AirlinersClient;
+import com.github.svyaz.airlinersbot.app.domain.PictureType;
 import com.github.svyaz.airlinersbot.app.service.subscription.TopPictureProcessingService;
 import com.github.svyaz.airlinersbot.datastore.service.PictureStorageService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class TopPictureUpdateServiceBean implements TopPictureUpdateService {
         Optional.ofNullable(airlinersClient.getTopPicture())
                 .filter(Predicate.not(picture -> picture.equals(currentPicture)))
                 .ifPresent(picture -> {
+                    picture.setPictureType(PictureType.TOP);
                     pictureStorageService.save(picture);
                     processingService.process(picture);
                 });

@@ -9,7 +9,6 @@ import com.github.svyaz.airlinersbot.app.service.translate.PictureTranslateServi
 import com.github.svyaz.airlinersbot.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Transactional
 abstract class AbstractRequestHandler<R extends Response> implements RequestHandler<R> {
@@ -26,12 +25,12 @@ abstract class AbstractRequestHandler<R extends Response> implements RequestHand
     @Autowired
     private UserService userService;
 
-    abstract R getResponse(User user, Message message);
+    abstract R getResponse(User user, String testText);
 
     @Override
     public R handle(Request request) {
         var user = userService.findAndUpdate(request.user());
-        R response = getResponse(user, request.message());
+        R response = getResponse(user, request.testText());
         userService.save(user);
         return response;
     }

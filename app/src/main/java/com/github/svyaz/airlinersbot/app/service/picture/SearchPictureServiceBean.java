@@ -2,9 +2,11 @@ package com.github.svyaz.airlinersbot.app.service.picture;
 
 import com.github.svyaz.airlinersbot.adapter.client.AirlinersClient;
 import com.github.svyaz.airlinersbot.app.domain.Picture;
+import com.github.svyaz.airlinersbot.app.domain.PictureType;
 import com.github.svyaz.airlinersbot.app.domain.SearchResult;
 import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.exception.PictureNotFoundException;
+import com.github.svyaz.airlinersbot.datastore.service.PictureStorageService;
 import com.github.svyaz.airlinersbot.datastore.service.UserStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,12 @@ public class SearchPictureServiceBean implements SearchPictureService {
 
     private final UserStorageService userStorageService;
 
+    private final PictureStorageService pictureStorageService;
+
     @Override
     public Picture search(User user, String keywords) {
         var picture = airlinersClient.search(keywords);
+        picture.setPictureType(PictureType.SEARCH);
 
         user.setSearchResult(SearchResult.builder()
                 .userId(user.getId())
@@ -44,6 +49,7 @@ public class SearchPictureServiceBean implements SearchPictureService {
                 .orElseThrow(() -> new PictureNotFoundException("No more search results"));
 
         var picture = airlinersClient.getPictureByUri(nextPageUri);
+        picture.setPictureType(PictureType.SEARCH);
 
         user.setSearchResult(SearchResult.builder()
                 .userId(user.getId())

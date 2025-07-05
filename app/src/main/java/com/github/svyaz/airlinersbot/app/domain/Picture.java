@@ -18,11 +18,15 @@ public class Picture implements Cloneable {
     private String airline;
     private String aircraft;
     private String registration;
-    @Translatable private String location;
-    @Translatable private String date;
-    @Translatable private String content;
+    @Translatable
+    private String location;
+    @Translatable
+    private String date;
+    @Translatable
+    private String content;
     private String author;
-    @Translatable private String authorCountry;
+    @Translatable
+    private String authorCountry;
     private LocalDateTime updateTime;
     private PictureType pictureType;
 
@@ -58,6 +62,17 @@ public class Picture implements Cloneable {
                 Optional.ofNullable(authorCountry)
                         .map(ac -> String.format("(%s)", ac))
                         .orElse("")
+        };
+    }
+
+    public Object[] getDetailsArgs() {
+        return new Object[]{
+                // title with link
+                Optional.ofNullable(photoPageUri)
+                        .map(u -> String.format("<a href='%s'>%d</a>", u, id))
+                        .orElseGet(() -> String.format("%d", id)),
+                // content
+                Optional.ofNullable(content).orElse("")
         };
     }
 }

@@ -1,6 +1,7 @@
 package com.github.svyaz.airlinersbot.datastore.service;
 
 import com.github.svyaz.airlinersbot.app.domain.Picture;
+import com.github.svyaz.airlinersbot.app.domain.PictureType;
 import com.github.svyaz.airlinersbot.datastore.mapper.PictureMapper;
 import com.github.svyaz.airlinersbot.datastore.repository.PictureRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class PictureStorageServiceBean implements PictureStorageService {
 
     @Override
     public Optional<Picture> getTop() {
-        return repository.findTopByOrderByUpdateTimeDesc()
+        return repository.findTopByPictureTypeOrderByUpdateTimeDesc(PictureType.TOP)
                 .map(mapper::toPicture);
     }
 

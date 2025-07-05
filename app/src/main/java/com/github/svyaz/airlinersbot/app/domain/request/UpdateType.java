@@ -24,7 +24,7 @@ public enum UpdateType {
             u -> u.getCallbackQuery().getFrom(),
             u -> u.getCallbackQuery().getMessage()),
 
-    UNKNOWN(
+    UNKNOWN(    //todo : тут надо где-то взять юзера и отдавать ему ошибку осмысленную
             update -> true,
             u -> null,
             u -> null,

@@ -4,7 +4,6 @@ import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ public class StartHandlerBean extends AbstractRequestHandler<TextResponse> {
     }
 
     @Override
-    TextResponse getResponse(User user, Message message) {
+    TextResponse getResponse(User user, String testText) {
         return new TextResponse(
                 user.getTlgUserId(),
                 Optional.ofNullable(user.getFirstName())

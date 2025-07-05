@@ -6,7 +6,6 @@ import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.EnumMap;
 import java.util.Objects;
@@ -24,7 +23,7 @@ public class SubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse
     }
 
     @Override
-    TextResponse getResponse(User user, Message message) {
+    TextResponse getResponse(User user, String testText) {
         if (Objects.isNull(user.getSubscriptions())) {
             user.setSubscriptions(new EnumMap<>(SubscriptionType.class));
         }
