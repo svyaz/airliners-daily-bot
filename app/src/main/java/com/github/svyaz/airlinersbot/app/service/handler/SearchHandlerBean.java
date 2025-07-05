@@ -23,7 +23,7 @@ public class SearchHandlerBean extends AbstractRequestHandler<PictureResponse> {
     @Override
     PictureResponse getResponse(User user, String testText) {
         return Optional.ofNullable(testText)
-                .map(t -> searchPictureService.search(user, t))
+                .map(text -> searchPictureService.search(user, text))
                 .map(picture -> translateService.translate(picture, user.getLanguageCode()))
                 .map(picture ->
                         new PictureResponse(

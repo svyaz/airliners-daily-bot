@@ -15,7 +15,7 @@ public class ContentHandlerTest extends HandlersSpec {
     ContentHandlerBean handler;
 
     //todo : complete tests
-    
+
     @Test
     void handle_successful() {
         var user = User.builder()

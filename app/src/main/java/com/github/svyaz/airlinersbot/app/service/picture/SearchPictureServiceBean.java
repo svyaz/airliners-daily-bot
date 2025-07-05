@@ -29,6 +29,7 @@ public class SearchPictureServiceBean implements SearchPictureService {
     public Picture search(User user, String keywords) {
         var picture = airlinersClient.search(keywords);
         picture.setPictureType(PictureType.SEARCH);
+        pictureStorageService.save(picture);
 
         user.setSearchResult(SearchResult.builder()
                 .userId(user.getId())
@@ -50,6 +51,7 @@ public class SearchPictureServiceBean implements SearchPictureService {
 
         var picture = airlinersClient.getPictureByUri(nextPageUri);
         picture.setPictureType(PictureType.SEARCH);
+        pictureStorageService.save(picture);
 
         user.setSearchResult(SearchResult.builder()
                 .userId(user.getId())
