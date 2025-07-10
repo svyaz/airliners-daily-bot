@@ -29,3 +29,12 @@ services:
       KAFKA_CREATE_TOPICS: "airliners-top-sending:1:3"
     depends_on:
       - zookeeper
+  libretranslate:
+    image: libretranslate/libretranslate
+    container_name: libretranslate
+    restart: always
+    ports:
+      - "5000:5000"
+    command: --load-only ru,en,fr
+    environment:
+      - LT_UPDATE_MODELS=false

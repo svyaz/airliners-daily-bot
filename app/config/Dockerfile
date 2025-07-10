@@ -15,6 +15,11 @@ COPY app/config/logback.xml /app/config/logback.xml
 
 # Устанавливаем переменные окружения
 ENV BOT_TOKEN=XXX
+ENV DB_SERVER_IP=localhost
+ENV DB_USERNAME=app
+ENV DB_PASSWORD=app
+ENV KAFKA_SERVER_IP=localhost
+ENV LT_SERVER_IP=localhost
 ENV JAVA_OPTS="-Xms1024m -Xmx1024m"
 ENV APP_OPTS="--spring.profiles.active=prod --logging.config=config/logback.xml"
 
@@ -23,4 +28,3 @@ CMD ["sh", "-c", "java ${JAVA_OPTS} -jar airliners-daily-bot.jar ${APP_OPTS}"]
 
 # Можно указать порт, если приложение использует его
 # EXPOSE 8080
-

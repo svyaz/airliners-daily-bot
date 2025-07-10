@@ -33,6 +33,10 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+  cache:
+    type: caffeine
+    caffeine.spec: maximumSize=50,expireAfterWrite=360m
+
 bot:
   name: AirlinersDailyBot
   token: ${BOT_TOKEN}
@@ -42,8 +46,14 @@ client:
   maxBufferSize: 1024000
   userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
 
+translationClient:
+  baseUrl: http://${LT_SERVER_IP}:5000
+  maxBufferSize: 256000
+  userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
+
 app:
   defaultLangCode: en
+  translations: [ru, fr]
   picture:
     update:
       initialDelay: 1000
