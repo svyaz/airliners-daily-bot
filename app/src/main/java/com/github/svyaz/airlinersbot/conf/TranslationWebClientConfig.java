@@ -7,8 +7,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
+
+import java.time.Duration;
 
 @Getter
 @Setter
@@ -21,12 +26,34 @@ public class TranslationWebClientConfig {
     @Value("${translationClient.maxBufferSize}")
     private Integer maxBufferSize;
 
-    @Value(("${translationClient.userAgent}"))
+    @Value("${translationClient.userAgent}")
     private String userAgent;
+
+    @Value("${translationClient.maxConnections}")
+    private Integer maxConnections;
+
+    @Value("${translationClient.pendingAcquireTimeout}")
+    private Integer pendingAcquireTimeout;
+
+    @Value("${translationClient.maxIdleTime}")
+    private Integer maxIdleTime;
+
+    @Value("${translationClient.pendingAcquireMaxCount}")
+    private Integer pendingAcquireMaxCount;
 
     @Bean(name = "translationWebClient")
     public WebClient webClient() {
+        ConnectionProvider connectionProvider = ConnectionProvider.builder("translationConnectionPool")
+                .maxConnections(maxConnections)
+                .pendingAcquireTimeout(Duration.ofMillis(pendingAcquireTimeout))
+                .pendingAcquireMaxCount(pendingAcquireMaxCount)
+                .maxIdleTime(Duration.ofMillis(maxIdleTime))
+                .build();
+
+        HttpClient httpClient = HttpClient.create(connectionProvider);
+
         return WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .uriBuilderFactory(new CustomUriBuilderFactory(baseUrl))
                 .defaultHeader(HttpHeaders.USER_AGENT, userAgent)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.ALL_VALUE)
