@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +20,8 @@ public class SubscriptionEntity {
 
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus status;
+
+    private LocalDateTime updateTime;
 
     @Data
     @NoArgsConstructor

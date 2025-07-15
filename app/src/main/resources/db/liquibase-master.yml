@@ -20,3 +20,6 @@ databaseChangeLog:
   - include:
       file: 2025-07-16_07_drop_Picture-next_page_uri.yml
       relativeToChangelogFile: true
+  - include:
+      file: 2025-07-16_08_Subscription-update_time.yml
+      relativeToChangelogFile: true

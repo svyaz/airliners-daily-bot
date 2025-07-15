@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: svyaz
+      changes:
+        - addColumn:
+            tableName: subscription
+            columns:
+            - column:
+                name: update_time
+                type: datetime
+        - update:
+            tableName: subscription
+            columns:
+              - column:
+                  name: update_time
+                  valueComputed: CURRENT_TIMESTAMP
+            where: 1=1
