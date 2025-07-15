@@ -23,19 +23,8 @@ public class PictureEntity {
     @Id
     private Long id;
 
-    /**
-     * photo file uri
-     */
     private String photoFileUri;
 
-    /**
-     * next file uri
-     */
-    private String nextPageUri;
-
-    /**
-     * Picture data next
-     */
     private String photoPageUri;
 
     private String airline;

@@ -17,3 +17,6 @@ databaseChangeLog:
   - include:
       file: 2025-07-04_06_pictureType_field.yml
       relativeToChangelogFile: true
+  - include:
+      file: 2025-07-16_07_drop_Picture-next_page_uri.yml
+      relativeToChangelogFile: true

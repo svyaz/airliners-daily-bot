@@ -34,7 +34,7 @@ public class TopPictureUserSenderServiceBean implements TopPictureUserSenderServ
                         msg.getTlgUserId(),
                         msg.getPicture(),
                         messageService.getLocalizedMessage("photo.caption", msg.getPicture().getCaptionArgs()),
-                        buttonsService.getButtons(msg.getPicture())
+                        buttonsService.getButtons(msg.getPicture(), null)
                 ))
                 .ifPresent(subscriptionsSender);
     }

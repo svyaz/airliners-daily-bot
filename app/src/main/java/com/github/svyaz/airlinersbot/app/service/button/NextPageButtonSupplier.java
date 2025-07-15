@@ -1,6 +1,8 @@
 package com.github.svyaz.airlinersbot.app.service.button;
 
 import com.github.svyaz.airlinersbot.app.domain.Picture;
+import com.github.svyaz.airlinersbot.app.domain.SearchResult;
+import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.response.InlineButton;
 import com.github.svyaz.airlinersbot.app.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,10 @@ public class NextPageButtonSupplier implements ButtonSupplier {
     private final MessageService messageService;
 
     @Override
-    public InlineButton getButton(Picture picture) {
-        return Optional.ofNullable(picture)
+    public InlineButton getButton(Picture picture, User user) {
+        return Optional.ofNullable(user)
+                .map(User::getSearchResult)
+                .map(SearchResult::getPicture)
                 .map(Picture::getNextPageUri)
                 .map(uri -> new InlineButton(
                         SHOW_NEXT_CB_DATA,

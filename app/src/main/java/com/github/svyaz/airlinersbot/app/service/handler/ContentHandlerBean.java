@@ -45,7 +45,7 @@ public class ContentHandlerBean extends AbstractRequestHandler<TextResponse> {
                         new TextResponse(
                                 user.getTlgUserId(),
                                 messageService.getLocalizedMessage("photo.details", picture.getDetailsArgs()),
-                                buttonsService.getButtons(picture)
+                                buttonsService.getButtons(picture, user)
                         )
                 )
                 .orElseThrow(

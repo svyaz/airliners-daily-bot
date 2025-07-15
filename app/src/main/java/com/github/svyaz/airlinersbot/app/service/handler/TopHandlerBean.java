@@ -29,7 +29,7 @@ public class TopHandlerBean extends AbstractRequestHandler<PictureResponse> {
                                 user.getTlgUserId(),
                                 picture,
                                 messageService.getLocalizedMessage("photo.caption", picture.getCaptionArgs()),
-                                buttonsService.getButtons(picture)
+                                buttonsService.getButtons(picture, null)
                         )
                 )
                 .orElse(null);

@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: svyaz
+      changes:
+        - dropColumn:
+            tableName: picture
+            columnName: next_page_uri

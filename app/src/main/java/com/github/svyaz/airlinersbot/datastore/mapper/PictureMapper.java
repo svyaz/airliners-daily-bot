@@ -9,6 +9,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PictureMapper {
 
+    @Mapping(target = "nextPageUri", ignore = true)
     Picture toPicture(PictureEntity pictureEntity);
 
     @Mapping(target = "updateTime", expression = "java(java.time.LocalDateTime.now())")
