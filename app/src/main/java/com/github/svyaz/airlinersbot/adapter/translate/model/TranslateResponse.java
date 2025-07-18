@@ -1,4 +1,6 @@
 package com.github.svyaz.airlinersbot.adapter.translate.model;
 
-public record TranslateResponse(String translatedText) {
+import java.util.List;
+
+public record TranslateResponse(List<TranslatedUnit> translations) {
 }

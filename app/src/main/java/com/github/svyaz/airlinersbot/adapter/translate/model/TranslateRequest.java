@@ -1,9 +1,10 @@
 package com.github.svyaz.airlinersbot.adapter.translate.model;
 
+import java.util.List;
+
 public record TranslateRequest(
-        String q,
-        String source,
-        String target,
+        List<String> texts,
+        String targetLanguageCode,
         String format
 ) {
 }

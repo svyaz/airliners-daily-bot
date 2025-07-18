@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
-@Service
-public class LibreTranslationClientBean implements TranslationClient {
+//@Service
+public class LibreTranslationClientBean /*implements TranslationClient*/ {
 
     private static final String sourceLangCode = "en";
     private static final String textFormal = "text";
@@ -20,7 +20,7 @@ public class LibreTranslationClientBean implements TranslationClient {
         this.webClient = webClient;
     }
 
-    @Override
+    /*@Override
     public String translate(String text, String lang) {
         log.debug("translate <- text [{}], lang [{}]", text, lang);
 
@@ -35,6 +35,6 @@ public class LibreTranslationClientBean implements TranslationClient {
 
     private TranslateRequest getRequest(String text, String targetLangCode) {
         return new TranslateRequest(text, sourceLangCode, targetLangCode, textFormal);
-    }
+    }*/
 
 }

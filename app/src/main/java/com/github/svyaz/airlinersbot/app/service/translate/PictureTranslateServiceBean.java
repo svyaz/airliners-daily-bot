@@ -10,8 +10,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -32,26 +35,49 @@ public class PictureTranslateServiceBean implements PictureTranslateService {
         return Optional.of(langCode)
                 .filter(Predicate.not(code -> translationConfig.getDefaultLangCode().equals(code)))
                 .filter(code -> translationConfig.getTranslations().contains(code))
-                .map(code -> translateFields(picture, langCode))
+                .map(code -> translatePicture(picture, langCode))
                 .orElse(picture);
     }
 
     @SneakyThrows
-    private Picture translateFields(Picture picture, String langCode) {
+    private Picture translatePicture(Picture picture, String langCode) {
+        List<String> texts = getTextsForTranslation(picture);
+
+        return Optional.of(texts)
+                .filter(Predicate.not(CollectionUtils::isEmpty))
+                .map(t -> client.translate(t, langCode))
+                .map(t -> getTranslated(picture, t))
+                .orElse(picture);
+    }
+
+    @SneakyThrows
+    private List<String> getTextsForTranslation(Picture picture) {
+        List<String> texts = new ArrayList<>();
+
+        for (Field field : picture.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(Translatable.class)) {
+                field.setAccessible(true);
+                var origValue =  Optional.ofNullable(field.get(picture))
+                        .map(o -> (String) o)
+                        .orElse("");
+                texts.add(origValue);
+            }
+        }
+
+        return texts;
+    }
+
+    @SneakyThrows
+    private Picture getTranslated(Picture picture, List<String> translatedTexts) {
+        log.debug("getTranslated: translatedTexts [{}]", translatedTexts);
+
         var newPicture = picture.clone();
+        int textIdx = 0;
 
         for (Field field : newPicture.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Translatable.class)) {
-                log.debug("translateFields: field [{}], langCode [{}]", field.getName(), langCode);
-
                 field.setAccessible(true);
-                var origValue = (String) field.get(newPicture);
-
-                var newValue = Optional.ofNullable(origValue)
-                        .map(v -> client.translate(v, langCode))
-                        .orElse(origValue);
-
-                field.set(newPicture, newValue);
+                field.set(newPicture, translatedTexts.get(textIdx++));
             }
         }
 

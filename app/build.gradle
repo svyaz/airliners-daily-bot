@@ -21,6 +21,7 @@ bootRun {
         systemProperty 'spring.config.location', 'file:config/application-test.yaml'
         systemProperty 'spring.profiles.active', 'test'
     }
+    jvmArgs = ["-Xms512m", "-Xmx1024m"]
 }
 
 bootJar {

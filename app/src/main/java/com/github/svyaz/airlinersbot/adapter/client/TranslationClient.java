@@ -1,6 +1,8 @@
 package com.github.svyaz.airlinersbot.adapter.client;
 
+import java.util.List;
+
 public interface TranslationClient {
 
-    String translate(String text, String lang);
+    List<String> translate(List<String> texts, String lang);
 }

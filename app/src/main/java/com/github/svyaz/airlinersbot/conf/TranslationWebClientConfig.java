@@ -20,6 +20,8 @@ import java.time.Duration;
 @Configuration
 public class TranslationWebClientConfig {
 
+    private static final String API_KEY_FORMAT = "Api-Key %s";
+
     @Value("${translationClient.baseUrl}")
     private String baseUrl;
 
@@ -41,6 +43,9 @@ public class TranslationWebClientConfig {
     @Value("${translationClient.pendingAcquireMaxCount}")
     private Integer pendingAcquireMaxCount;
 
+    @Value("${translationClient.api-key}")
+    private String apiKey;
+
     @Bean(name = "translationWebClient")
     public WebClient webClient() {
         ConnectionProvider connectionProvider = ConnectionProvider.builder("translationConnectionPool")
@@ -60,6 +65,7 @@ public class TranslationWebClientConfig {
                 .defaultHeader(HttpHeaders.CACHE_CONTROL, "max-age=0")
                 .defaultHeader(HttpHeaders.CONNECTION, "keep-alive")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, String.format(API_KEY_FORMAT, apiKey))
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(c -> c.defaultCodecs().maxInMemorySize(maxBufferSize))
                         .build())
