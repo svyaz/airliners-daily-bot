@@ -63,7 +63,7 @@ translationClient:
 
 app:
   defaultLangCode: en
-  translations: [ru, fr]
+  translations: [ru]
   picture:
     update:
       initialDelay: 1000
