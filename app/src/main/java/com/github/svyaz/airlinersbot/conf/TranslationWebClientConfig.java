@@ -2,7 +2,7 @@ package com.github.svyaz.airlinersbot.conf;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -18,32 +18,25 @@ import java.time.Duration;
 @Getter
 @Setter
 @Configuration
+@ConfigurationProperties(prefix = "translation-client")
 public class TranslationWebClientConfig {
 
     private static final String API_KEY_FORMAT = "Api-Key %s";
 
-    @Value("${translationClient.baseUrl}")
     private String baseUrl;
 
-    @Value("${translationClient.maxBufferSize}")
     private Integer maxBufferSize;
 
-    @Value("${translationClient.userAgent}")
     private String userAgent;
 
-    @Value("${translationClient.maxConnections}")
     private Integer maxConnections;
 
-    @Value("${translationClient.pendingAcquireTimeout}")
     private Integer pendingAcquireTimeout;
 
-    @Value("${translationClient.maxIdleTime}")
     private Integer maxIdleTime;
 
-    @Value("${translationClient.pendingAcquireMaxCount}")
     private Integer pendingAcquireMaxCount;
 
-    @Value("${translationClient.api-key}")
     private String apiKey;
 
     @Bean(name = "translationWebClient")

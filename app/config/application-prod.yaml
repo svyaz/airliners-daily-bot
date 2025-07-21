@@ -45,11 +45,20 @@ client:
   baseUrl: https://www.airliners.net
   maxBufferSize: 1024000
   userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
+  maxConnections: 100
+  pendingAcquireTimeout: 10000
+  maxIdleTime: 5000
+  pendingAcquireMaxCount: -1
 
-translationClient:
+translation-client:
   baseUrl: http://${LT_SERVER_IP}:5000
   maxBufferSize: 256000
   userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36
+  maxConnections: 20
+  pendingAcquireTimeout: 10000
+  maxIdleTime: 5000
+  pendingAcquireMaxCount: -1
+  apiKey: ${YA_TRANSLATE_API_KEY}
 
 app:
   defaultLangCode: en

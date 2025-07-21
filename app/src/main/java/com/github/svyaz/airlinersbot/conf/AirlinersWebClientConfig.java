@@ -1,7 +1,8 @@
 package com.github.svyaz.airlinersbot.conf;
 
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -15,28 +16,23 @@ import reactor.netty.resources.ConnectionProvider;
 import java.time.Duration;
 
 @Getter
+@Setter
 @Configuration
+@ConfigurationProperties(prefix = "client")
 public class AirlinersWebClientConfig {
 
-    @Value("${client.baseUrl}")
     private String baseUrl;
 
-    @Value("${client.maxBufferSize}")
     private Integer maxBufferSize;
 
-    @Value("${client.userAgent}")
     private String userAgent;
 
-    @Value("${client.maxConnections}")
     private Integer maxConnections;
 
-    @Value("${client.pendingAcquireTimeout}")
     private Integer pendingAcquireTimeout;
 
-    @Value("${client.maxIdleTime}")
     private Integer maxIdleTime;
 
-    @Value("${client.pendingAcquireMaxCount}")
     private Integer pendingAcquireMaxCount;
 
     @Bean(name = "airlinersWebClient")
