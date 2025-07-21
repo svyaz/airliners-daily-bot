@@ -6,7 +6,7 @@ plugins {
 
 allprojects {
     group = 'com.github.svyaz.airlinersdailybot'
-    version = '1.0.2'
+    version = '1.0.3'
 
     repositories {
         mavenCentral()
