@@ -34,6 +34,11 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      auto-offset-reset: earliest
+      max-poll-interval-ms: 30000
+      heartbeat-interval-ms: 3000
+      session-timeout-ms: 10000
 
   cache:
     type: caffeine
