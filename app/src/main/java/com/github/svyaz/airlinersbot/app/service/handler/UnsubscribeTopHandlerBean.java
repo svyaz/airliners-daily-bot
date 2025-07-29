@@ -6,6 +6,7 @@ import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.EnumMap;
 import java.util.Objects;
@@ -16,7 +17,8 @@ import static com.github.svyaz.airlinersbot.app.domain.subscription.Subscription
 import static com.github.svyaz.airlinersbot.app.domain.subscription.SubscriptionType.TOP;
 
 @Service
-public class UnsubscribeTopHandlerBean extends AbstractRequestHandler<TextResponse> {
+@Transactional
+public class UnsubscribeTopHandlerBean extends AbstractRequestHandler {
 
     @Override
     public RequestType myType() {

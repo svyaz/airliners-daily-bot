@@ -6,12 +6,14 @@ import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.service.picture.TopPictureRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class TopHandlerBean extends AbstractRequestHandler<PictureResponse> {
+public class TopHandlerBean extends AbstractRequestHandler {
 
     private final TopPictureRequestService topPictureRequestService;
 

@@ -6,12 +6,14 @@ import com.github.svyaz.airlinersbot.app.domain.response.PictureResponse;
 import com.github.svyaz.airlinersbot.app.service.picture.SearchPictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class SearchHandlerBean extends AbstractRequestHandler<PictureResponse> {
+public class SearchHandlerBean extends AbstractRequestHandler {
 
     private final SearchPictureService searchPictureService;
 

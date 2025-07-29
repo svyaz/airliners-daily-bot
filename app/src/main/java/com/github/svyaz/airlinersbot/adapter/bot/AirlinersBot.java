@@ -6,6 +6,7 @@ import com.github.svyaz.airlinersbot.adapter.request.resolver.RequestResolver;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
+import com.github.svyaz.airlinersbot.app.exception.CommonBotException;
 import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
 import com.github.svyaz.airlinersbot.conf.properties.BotProperties;
 import com.github.svyaz.airlinersbot.lib.ratelimiter.RateLimiter;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -33,12 +35,12 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
     private final Set<Long> inProgress;
     private final String botName;
     private final RequestResolver requestResolver;
-    private final Map<RequestType, RequestHandler<? extends Response>> requestHandlers;
+    private final Map<RequestType, RequestHandler> requestHandlers;
     private final Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers;
 
     public AirlinersBot(BotProperties botProperties,
                         RequestResolver requestResolver,
-                        Map<RequestType, RequestHandler<? extends Response>> requestHandlers,
+                        Map<RequestType, RequestHandler> requestHandlers,
                         Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers) {
         super(botProperties.getToken());
         this.botName = botProperties.getName();
@@ -61,6 +63,7 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
     }
 
     @Override
+    @Transactional(noRollbackFor = CommonBotException.class)
     public void onUpdateReceived(Update update) {
         log.info("onUpdateReceived <- {}", update);
 
@@ -78,12 +81,17 @@ public class AirlinersBot extends TelegramLongPollingBot implements Initializing
 
                 Optional.of(request)
                         .flatMap(req -> Optional.ofNullable(requestHandlers.get(req.type()))
-                                .map(handler -> handler.handle(req)))
-                        .flatMap(resp -> Optional.ofNullable(responseMappers.get(resp.getType()))
-                                .map(mapper -> mapper.apply(resp)))
-                        .ifPresent(this::sendSafe);
+                                .map(handler -> handler.handle(req))
+                        )
+                        .stream()
+                        .flatMap(List::stream)
+                        .map(resp ->
+                                responseMappers.get(resp.getType()).apply(resp)
+                        )
+                        .forEach(this::sendSafe);
             } catch (Exception ex) {
                 Thread.currentThread().interrupt();
+                log.warn("onUpdateReceived: {}", ex.getMessage());
                 throw new RuntimeException("Error while handling request", ex);
             } finally {
                 inProgress.remove(request.user().getId());

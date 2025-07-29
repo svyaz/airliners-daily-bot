@@ -4,9 +4,11 @@ import com.github.svyaz.airlinersbot.app.domain.User;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.TextResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class HelpHandlerBean extends AbstractRequestHandler<TextResponse> {
+@Transactional
+public class HelpHandlerBean extends AbstractRequestHandler {
 
     @Override
     public RequestType myType() {

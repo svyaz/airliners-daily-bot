@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 public class RequestHandlersConfig {
 
     @Bean
-    public Map<RequestType, RequestHandler<? extends Response>> requestHandlers(
-            Set<RequestHandler<? extends Response>> handlers) {
+    public Map<RequestType, RequestHandler> requestHandlers(
+            Set<RequestHandler> handlers) {
 
         return handlers.stream()
                 .collect(Collectors.toMap(RequestHandler::myType, Function.identity()));

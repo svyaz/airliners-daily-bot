@@ -4,9 +4,11 @@ import com.github.svyaz.airlinersbot.app.domain.request.Request;
 import com.github.svyaz.airlinersbot.app.domain.request.RequestType;
 import com.github.svyaz.airlinersbot.app.domain.response.Response;
 
-public interface RequestHandler<R extends Response> {
+import java.util.List;
+
+public interface RequestHandler {
 
     RequestType myType();
 
-    R handle(Request request);
+    List<Response> handle(Request request);
 }

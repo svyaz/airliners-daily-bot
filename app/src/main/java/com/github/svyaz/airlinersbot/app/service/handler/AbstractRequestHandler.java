@@ -8,10 +8,10 @@ import com.github.svyaz.airlinersbot.app.service.message.MessageService;
 import com.github.svyaz.airlinersbot.app.service.translate.PictureTranslateService;
 import com.github.svyaz.airlinersbot.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-abstract class AbstractRequestHandler<R extends Response> implements RequestHandler<R> {
+import java.util.List;
+
+abstract class AbstractRequestHandler implements RequestHandler {
 
     @Autowired
     protected MessageService messageService;
@@ -25,14 +25,14 @@ abstract class AbstractRequestHandler<R extends Response> implements RequestHand
     @Autowired
     private UserService userService;
 
-    abstract R getResponse(User user, String testText);
+    abstract Response getResponse(User user, String testText);
 
     @Override
-    public R handle(Request request) {
+    public List<Response> handle(Request request) {
         var user = userService.findAndUpdate(request.user());
-        R response = getResponse(user, request.testText());
+        Response response = getResponse(user, request.testText());
         userService.save(user);
-        return response;
+        return List.of(response);
     }
 
 }

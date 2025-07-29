@@ -7,6 +7,7 @@ import com.github.svyaz.airlinersbot.app.exception.PictureNotFoundException;
 import com.github.svyaz.airlinersbot.datastore.service.PictureStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
@@ -14,8 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class ContentHandlerBean extends AbstractRequestHandler<TextResponse> {
+public class ContentHandlerBean extends AbstractRequestHandler {
 
     private static final String ID_TEMPLATE = "\\d+$";
 

@@ -32,10 +32,12 @@ public class HandlerAspect {
         } catch (CommonBotException ex) {
             log.warn("proceedHandler -> {}", ex.getMessage());
             var request = (Request) joinPoint.getArgs()[0];
-            return new TextResponse(
-                    request.user().getTlgUserId(),
-                    messageService.getLocalizedMessage(ex.getMessageCode()),
-                    List.of()
+            return List.of(
+                    new TextResponse(
+                            request.user().getTlgUserId(),
+                            messageService.getLocalizedMessage(ex.getMessageCode()),
+                            List.of()
+                    )
             );
         } catch (Throwable ex) {
             log.error("proceedHandler -> {}", ex.getMessage());
