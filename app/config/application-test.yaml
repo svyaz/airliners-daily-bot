@@ -86,8 +86,8 @@ app:
 ratelimiter:
   properties:
     subscrSendingLimiter:
-      callsNumber: 1
-      periodMillis: 5000
+      callsNumber: 3
+      periodMillis: 1000
 
 logging:
   level:
