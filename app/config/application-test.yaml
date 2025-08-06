@@ -10,6 +10,14 @@ spring:
     username: app
     password: app
     driverClassName: org.postgresql.Driver
+    hikari:
+      pool-name: HikariCP
+      auto-commit: true
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      minimum-idle: 5
+      maximum-pool-size: 10
 
   jpa:
 #    database-platform: org.hibernate.dialect.H2Dialect
@@ -94,5 +102,6 @@ logging:
     root: info
     com.github.svyaz: debug
     org.telegram: info
+#    com.zaxxer.hikari: debug
 #    org.springframework.cache: info
 #    org.springframework.web: trace
