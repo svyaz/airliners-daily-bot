@@ -11,7 +11,7 @@ spring:
     password: ${DB_PASSWORD}
     driverClassName: org.postgresql.Driver
     hikari:
-      pool-name: HikariCP
+      pool-name: db-pool
       auto-commit: true
       connection-timeout: 30000
       idle-timeout: 600000
@@ -75,7 +75,7 @@ translation-client:
 
 app:
   defaultLangCode: en
-  translations: [ru, fr]
+  translations: [ru]
   picture:
     update:
       initialDelay: 1000
