@@ -9,7 +9,7 @@ docker на хостинге:
     - установить в переменную окружения BOT_TOKEN значение токена!
     - установить в конфиге application-prod.yaml значение пароля к БД!
     - создать образ из Dockerfile:
-        docker build -t airliners-bot-app-1:latest .
+        docker build -t airliners-bot-app:latest .
 
 Создаем контейнер с приложением:
     - Если нужно установить еще какой-то docker-контейнер, то исправить файл docker-app.yml, который там лежит.
