@@ -24,6 +24,7 @@ public abstract class SpringBootTestSpec {
     @Container
     public static KafkaContainer kafka = new KafkaContainer(
             DockerImageName.parse("apache/kafka:3.8.1"))
+            .withReuse(true)
             .withEnv("KAFKA_AUTO_CREATE_TOPICS_ENABLE", "true");
 
     @DynamicPropertySource
