@@ -39,7 +39,8 @@ abstract class AbstractRequestHandler implements RequestHandler {
 
         Optional.ofNullable(request.message())
                 .map(Message::getMessageId)
-                .filter(msgId -> request.type().getUpdateType().isClearButtons())                .map(msgId -> new EditButtonsResponse(user.getTlgUserId(), msgId, null))
+                .filter(msgId -> request.type().getUpdateType().isClearButtons())
+                .map(msgId -> new EditButtonsResponse(user.getTlgUserId(), msgId, null))
                 .ifPresent(responses::add);
 
         responses.add(getResponse(user, request.testText()));
