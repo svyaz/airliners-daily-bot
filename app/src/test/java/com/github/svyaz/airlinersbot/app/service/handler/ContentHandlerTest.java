@@ -22,6 +22,18 @@ public class ContentHandlerTest extends HandlersSpec {
 
     private static final String CONTENT = "picture content";
 
+    private static final Picture picture = Picture.builder()
+            .id(2L)
+            .content(CONTENT)
+            .build();
+
+    private static final Request request = new Request(
+            RequestType.CONTENT,
+            user,
+            new Message(),
+            String.format("%s-%d", Constants.SHOW_CONTENT_CB_DATA, 2L)
+    );
+
     @Autowired
     ContentHandlerBean handler;
 
@@ -30,11 +42,6 @@ public class ContentHandlerTest extends HandlersSpec {
 
     @Test
     void handle_successful() {
-        var picture = Picture.builder()
-                .id(2L)
-                .content(CONTENT)
-                .build();
-
         when(pictureStorageService.find(any()))
                 .thenReturn(Optional.of(picture));
 
@@ -47,13 +54,6 @@ public class ContentHandlerTest extends HandlersSpec {
         when(buttonsService.getButtons(any(), any()))
                 .thenReturn(List.of());
 
-        var request = new Request(
-                RequestType.CONTENT,
-                user,
-                new Message(),
-                String.format("%s-%d", Constants.SHOW_CONTENT_CB_DATA, 2L)
-        );
-
         Assertions.assertEquals(
                 List.of(new TextResponse(1L, CONTENT, List.of())),
                 handler.handle(request)
@@ -62,7 +62,7 @@ public class ContentHandlerTest extends HandlersSpec {
 
     @Test
     void handle_throws_when_callback_data_not_contains_id() {
-        var request = new Request(
+        var wrongRequest = new Request(
                 RequestType.CONTENT,
                 user,
                 new Message(),
@@ -71,7 +71,7 @@ public class ContentHandlerTest extends HandlersSpec {
 
         var exception = Assertions.assertThrows(
                 PictureNotFoundException.class,
-                () -> handler.handle(request)
+                () -> handler.handle(wrongRequest)
         );
 
         Assertions.assertEquals(
@@ -84,13 +84,6 @@ public class ContentHandlerTest extends HandlersSpec {
     void handle_throws_when_picture_not_found_in_db() {
         when(pictureStorageService.find(any()))
                 .thenReturn(Optional.empty());
-
-        var request = new Request(
-                RequestType.CONTENT,
-                user,
-                new Message(),
-                String.format("%s-%d", Constants.SHOW_CONTENT_CB_DATA, 2L)
-        );
 
         var exception = Assertions.assertThrows(
                 PictureNotFoundException.class,
@@ -105,20 +98,13 @@ public class ContentHandlerTest extends HandlersSpec {
 
     @Test
     void handle_throws_when_picture_has_no_content() {
-        var picture = Picture.builder()
+        var nullContentPicture = Picture.builder()
                 .id(2L)
                 .content(null)
                 .build();
 
         when(pictureStorageService.find(any()))
-                .thenReturn(Optional.of(picture));
-
-        var request = new Request(
-                RequestType.CONTENT,
-                user,
-                new Message(),
-                String.format("%s-%d", Constants.SHOW_CONTENT_CB_DATA, 2L)
-        );
+                .thenReturn(Optional.of(nullContentPicture));
 
         var exception = Assertions.assertThrows(
                 PictureNotFoundException.class,
@@ -133,23 +119,11 @@ public class ContentHandlerTest extends HandlersSpec {
 
     @Test
     void handle_throws_when_translate_service_returns_null() {
-        var picture = Picture.builder()
-                .id(2L)
-                .content(CONTENT)
-                .build();
-
         when(pictureStorageService.find(any()))
                 .thenReturn(Optional.of(picture));
 
         when(translateService.translate(any(), any()))
                 .thenReturn(null);
-
-        var request = new Request(
-                RequestType.CONTENT,
-                user,
-                new Message(),
-                String.format("%s-%d", Constants.SHOW_CONTENT_CB_DATA, 2L)
-        );
 
         var exception = Assertions.assertThrows(
                 PictureNotFoundException.class,

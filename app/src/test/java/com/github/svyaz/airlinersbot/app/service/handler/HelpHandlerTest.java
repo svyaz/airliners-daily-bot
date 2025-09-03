@@ -17,6 +17,13 @@ public class HelpHandlerTest extends HandlersSpec {
 
     private static final String HELP_TEXT = "Help text";
 
+    private static final Request request = new Request(
+            RequestType.HELP,
+            user,
+            new Message(),
+            Constants.HELP_COMMAND
+    );
+
     @Autowired
     HelpHandlerBean handler;
 
@@ -27,13 +34,6 @@ public class HelpHandlerTest extends HandlersSpec {
 
         when(buttonsService.getButtons())
                 .thenReturn(List.of());
-
-        var request = new Request(
-                RequestType.HELP,
-                user,
-                new Message(),
-                Constants.HELP_COMMAND
-        );
 
         Assertions.assertEquals(
                 List.of(new TextResponse(1L, HELP_TEXT, List.of())),
