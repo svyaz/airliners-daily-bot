@@ -38,11 +38,12 @@ public class SubscribeTopHandlerBean extends AbstractRequestHandler {
 
         if (INACTIVE.equals(subscription.getStatus())) {
             subscription.setStatus(ACTIVE);
-            user.getSubscriptions().put(TOP, subscription);
             msgCode = "subscription.top.subscribe";
         } else {
             msgCode = "subscription.top.already-subscribed";
         }
+
+        user.getSubscriptions().put(TOP, subscription);
 
         return new TextResponse(
                 user.getTlgUserId(),

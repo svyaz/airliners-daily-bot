@@ -39,11 +39,12 @@ public class UnsubscribeTopHandlerBean extends AbstractRequestHandler {
 
         if (ACTIVE.equals(subscription.getStatus())) {
             subscription.setStatus(INACTIVE);
-            user.getSubscriptions().put(TOP, subscription);
             msgCode = "subscription.top.unsubscribe";
         } else {
             msgCode = "subscription.top.not-subscribed";
         }
+
+        user.getSubscriptions().put(TOP, subscription);
 
         return new TextResponse(
                 user.getTlgUserId(),
