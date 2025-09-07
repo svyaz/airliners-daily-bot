@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -26,11 +27,11 @@ public enum UpdateType {
             u -> u.getCallbackQuery().getMessage(),
             true),
 
-    UNKNOWN(    //todo : тут надо где-то взять юзера и отдавать ему ошибку осмысленную
+    UNKNOWN(    //предполагаем что неизвестная команда содержит сообщение
             update -> true,
-            u -> null,
-            u -> null,
-            u -> null,
+            u -> Optional.ofNullable(u.getMessage()).map(Message::getText).orElse(null),
+            u -> Optional.ofNullable(u.getMessage()).map(Message::getFrom).orElse(null),
+            Update::getMessage,
             false);
 
     /**

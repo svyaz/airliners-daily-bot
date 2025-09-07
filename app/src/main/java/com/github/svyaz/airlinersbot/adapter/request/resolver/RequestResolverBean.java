@@ -40,7 +40,14 @@ public class RequestResolverBean implements RequestResolver {
                                                     testText
                                             )
                                     )
-                                    .orElse(null);
+                                    .orElseGet(() ->
+                                            new Request(
+                                                    UNKNOWN_COMMAND,
+                                                    userMapper.toUser(tlgUser),
+                                                    tlgMessage,
+                                                    testText
+                                            )
+                                    );
                         }
                 )
                 .orElseGet(() -> new Request(UNKNOWN_COMMAND, null, null, null));
