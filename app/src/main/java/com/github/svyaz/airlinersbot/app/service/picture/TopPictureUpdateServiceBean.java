@@ -9,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-import java.util.function.Predicate;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -29,15 +26,20 @@ public class TopPictureUpdateServiceBean implements TopPictureUpdateService {
             fixedDelayString = "${app.picture.update.fixedDelay}"
     )
     public void update() {
-        var currentPicture = pictureStorageService.getTop()
-                .orElse(null);
+        log.info("update <-");
 
-        Optional.ofNullable(airlinersClient.getTopPicture())
-                .filter(Predicate.not(picture -> picture.equals(currentPicture)))
-                .ifPresent(picture -> {
-                    picture.setPictureType(PictureType.TOP);
-                    pictureStorageService.save(picture);
-                    processingService.process(picture);
-                });
+        var picture = airlinersClient.getTopPicture();
+
+        pictureStorageService.find(picture.getId())
+                .ifPresentOrElse(
+                        p -> log.info("update -> already sent, id = {}", p.getId()),
+                        () -> {
+                            log.info("update -> save and send, id = {}", picture.getId());
+                            picture.setPictureType(PictureType.TOP);
+                            pictureStorageService.save(picture);
+                            processingService.process(picture);
+                        }
+                );
     }
+
 }
