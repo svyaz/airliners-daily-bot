@@ -1,5 +1,5 @@
 # Используем официальный образ OpenJDK
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21
 
 # Создаем рабочую директорию
 WORKDIR /app
@@ -19,8 +19,9 @@ ENV DB_SERVER_IP=localhost
 ENV DB_USERNAME=app
 ENV DB_PASSWORD=app
 ENV KAFKA_SERVER_IP=localhost
-ENV LT_SERVER_IP=localhost
-ENV JAVA_OPTS="-Xms1024m -Xmx1024m"
+ENV YA_TRANSLATE_SERVER=https://translate.api.cloud.yandex.net
+ENV YA_TRANSLATE_API_KEY=YYY
+ENV JAVA_OPTS="-Xms256m -Xmx512m"
 ENV APP_OPTS="--spring.profiles.active=prod --logging.config=config/logback.xml"
 
 # Команда для запуска приложения
