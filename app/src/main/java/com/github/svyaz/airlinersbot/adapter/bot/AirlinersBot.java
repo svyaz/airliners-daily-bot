@@ -8,14 +8,13 @@ import com.github.svyaz.airlinersbot.app.domain.response.Response;
 import com.github.svyaz.airlinersbot.app.domain.response.ResponseType;
 import com.github.svyaz.airlinersbot.app.exception.CommonBotException;
 import com.github.svyaz.airlinersbot.app.service.handler.RequestHandler;
-import com.github.svyaz.airlinersbot.conf.properties.BotProperties;
 import com.github.svyaz.airlinersbot.lib.ratelimiter.RateLimiter;
-//import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -27,27 +26,20 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@Component(AirlinersBot.BOT_COMPONENT_NAME)
 public class AirlinersBot extends TelegramLongPollingBot implements InitializingBean, SubscriptionsSender {
-
-    public static final String BOT_COMPONENT_NAME = "BOT_COMPONENT";
 
     private final Set<Long> inProgress;
     private final String botName;
-    private final RequestResolver requestResolver;
-    private final Map<RequestType, RequestHandler> requestHandlers;
-    private final Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers;
 
-    public AirlinersBot(BotProperties botProperties,
-                        RequestResolver requestResolver,
-                        Map<RequestType, RequestHandler> requestHandlers,
-                        Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers) {
-        super(botProperties.getToken());
-        this.botName = botProperties.getName();
-        this.requestResolver = requestResolver;
-        this.requestHandlers = requestHandlers;
-        this.responseMappers = responseMappers;
+    @Autowired private RequestResolver requestResolver;
+    @Autowired private Map<RequestType, RequestHandler> requestHandlers;
+    @Autowired private Map<ResponseType, ResponseMapper<? extends ResponseDto<?>>> responseMappers;
 
+    public AirlinersBot(DefaultBotOptions options,
+            String botName,
+            String botToken) {
+        super(options, botToken);
+        this.botName = botName;
         this.inProgress = Collections.synchronizedSet(new HashSet<>());
     }
 
