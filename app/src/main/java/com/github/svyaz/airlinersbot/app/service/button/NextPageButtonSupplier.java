@@ -15,7 +15,7 @@ import java.util.Optional;
 import static com.github.svyaz.airlinersbot.conf.properties.Constants.SHOW_NEXT_CB_DATA;
 
 @Component
-@Order(3)
+@Order(2)
 @RequiredArgsConstructor
 public class NextPageButtonSupplier implements ButtonSupplier {
 

@@ -33,7 +33,7 @@ public class TopPictureUserSenderServiceBean implements TopPictureUserSenderServ
                 .map(msg -> new PictureResponse(
                         msg.getTlgUserId(),
                         msg.getPicture(),
-                        messageService.getLocalizedMessage("photo.caption", msg.getPicture().getCaptionArgs()),
+                        messageService.getFullPictureCaption(msg.getPicture()),
                         buttonsService.getButtons(msg.getPicture(), null)
                 ))
                 .ifPresent(subscriptionsSender);

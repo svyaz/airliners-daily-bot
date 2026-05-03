@@ -44,8 +44,8 @@ public class Picture implements Cloneable {
         return new Object[]{
                 // title with link
                 Optional.ofNullable(photoPageUri)
-                        .map(u -> String.format("<a href='%s'>%d</a>", u, id))
-                        .orElseGet(() -> String.format("%d", id)),
+                        .map(u -> "<a href='%s'>%d</a>".formatted(u, id))
+                        .orElseGet(() -> id.toString()),
                 // airline
                 Optional.ofNullable(airline).orElse(""),
                 // aircraft
@@ -60,17 +60,13 @@ public class Picture implements Cloneable {
                 Optional.ofNullable(author).orElse(""),
                 // author country
                 Optional.ofNullable(authorCountry)
-                        .map(ac -> String.format("(%s)", ac))
+                        .map("(%s)"::formatted)
                         .orElse("")
         };
     }
 
     public Object[] getDetailsArgs() {
         return new Object[]{
-                // title with link
-                Optional.ofNullable(photoPageUri)
-                        .map(u -> String.format("<a href='%s'>%d</a>", u, id))
-                        .orElseGet(() -> String.format("%d", id)),
                 // content
                 Optional.ofNullable(content).orElse("")
         };

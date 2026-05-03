@@ -22,7 +22,6 @@ public enum RequestType {
 
     SEARCH_NEXT(UpdateType.CALLBACK_BUTTON, SHOW_NEXT_CB_DATA::equals),
     TOP(UpdateType.CALLBACK_BUTTON, SHOW_TOP_CB_DATA::equals),
-    CONTENT(UpdateType.CALLBACK_BUTTON, text -> text.matches(String.format("^%s-\\d+$", SHOW_CONTENT_CB_DATA))),
     UNKNOWN_COMMAND(UpdateType.UNKNOWN, text -> true);
 
     final UpdateType updateType;

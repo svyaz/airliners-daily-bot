@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import java.util.Optional;
+
 @Component
 public class PictureResponseMapper extends AbstractResponseMapper<PictureResponseDto> {
 
@@ -32,7 +34,11 @@ public class PictureResponseMapper extends AbstractResponseMapper<PictureRespons
                         .parseMode(Constants.PARSE_MODE)
                         .chatId(resp.getChatId())
                         .photo(new InputFile(resp.getPicture().getPhotoFileUri()))
-                        .caption(resp.getText())
+                        .caption(Optional.of(resp.getText())
+                                .filter(t -> t.length() > 1024)
+                                .map(t -> t.substring(0, 1024))
+                                .orElse(resp.getText())
+                        )
                         .replyMarkup(keyboardMapper.apply(resp.getInlineButtons()))
                         .build(),
                 new SendPhotoStrategy()
