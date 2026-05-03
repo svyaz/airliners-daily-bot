@@ -1,7 +1,10 @@
 package com.github.svyaz.airlinersbot.adapter.client;
 
 import com.github.svyaz.airlinersbot.adapter.htmlselector.HtmlSelector;
+import com.github.svyaz.airlinersbot.adapter.htmlselector.PowChallengeDataExtractor;
+import com.github.svyaz.airlinersbot.adapter.htmlselector.PowChallengeDataResolver;
 import com.github.svyaz.airlinersbot.app.domain.Picture;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,18 +15,29 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AirlinersClientBean implements AirlinersClient {
+
+    private static final String POW_COOKIE_NAME = "pow_bypass";
 
     private final WebClient webClient;
 
     private final HtmlSelector htmlSelector;
 
+    private final PowChallengeDataExtractor pcdExtractor;
+
+    private final PowChallengeDataResolver pcdResolver;
+
     public AirlinersClientBean(
             @Qualifier("airlinersWebClient") WebClient webClient,
-            HtmlSelector htmlSelector) {
+            HtmlSelector htmlSelector,
+            PowChallengeDataExtractor pcdExtractor,
+            PowChallengeDataResolver pcdResolver) {
         this.webClient = webClient;
         this.htmlSelector = htmlSelector;
+        this.pcdExtractor = pcdExtractor;
+        this.pcdResolver = pcdResolver;
     }
 
     @Override
@@ -60,11 +74,26 @@ public class AirlinersClientBean implements AirlinersClient {
                 .block();
     }
 
+    /**
+     * Executes GET request.
+     * If body contains proof-of-work challenge script, resolves it and
+     * executes second GET request with answer (cookie 'pow_bypass')
+     */
     private Mono<String> getQuery(String uri) {
-        return webClient.get()
+        var body1 = webClient.get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class);
+
+        return body1.map(pcdExtractor)
+                .map(pcdResolver)
+                .flatMap(value -> webClient.get()
+                        .uri(uri)
+                        .cookie(POW_COOKIE_NAME, value)
+                        .retrieve()
+                        .bodyToMono(String.class)
+                )
+                .defaultIfEmpty(body1.toString());
     }
 
     private BodyInserters.FormInserter<String> getBodyForm(String keywords) {
